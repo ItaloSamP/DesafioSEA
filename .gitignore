@@ -1,0 +1,19 @@
+# Liferay / Gradle
+.gradle/
+build/
+bin/
+/bundles/
+/deploy/
+
+#IDEs
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+
+# OS
+.DS_Store
+Thumbs.db

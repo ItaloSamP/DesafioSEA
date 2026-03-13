@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  liferay:
+    image: liferay/portal:7.4.3.112-ga112
+    container_name: todolist
+    ports:
+      - "8080:8080"
+      - "11311:11311"
+    environment:
+      - LIFERAY_SETUP_PERIOD_WIZARD_PERIOD_ADD_PERIOD_SAMPLE_PERIOD_DATA=on
+      - LIFERAY_SETUP_PERIOD_WIZARD_PERIOD_ENABLE=false
+    volumes:
+      - ./bundles:/opt/liferay/data
+      - ./deploy:/opt/liferay/deploy
