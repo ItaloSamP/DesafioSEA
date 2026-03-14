@@ -1,3 +1,16 @@
+buildscript {
+	dependencies {
+		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.workspace", version: "latest.release"
+	}
+	repositories {
+		maven {
+			url "https://repository-cdn.liferay.com/nexus/content/groups/public"
+		}
+	}
+}
+
+apply plugin: "com.liferay.workspace"
+
 include "modules:todo-list:todo-list-api"
 include "modules:todo-list:todo-list-service"
 include "modules:todo-list:todo-list-web"
