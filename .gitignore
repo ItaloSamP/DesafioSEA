@@ -12,6 +12,7 @@ bin/
 .classpath
 .project
 .settings/
+.env
 
 
 # OS
