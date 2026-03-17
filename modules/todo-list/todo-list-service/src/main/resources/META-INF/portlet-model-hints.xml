@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="br.com.seatecnologia.todolist.model.Subtask">
+		<field name="uuid" type="String" />
+		<field name="subtaskId" type="long" />
+		<field name="taskId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="title" type="String" />
+		<field name="isCompleted" type="boolean" />
+	</model>
+	<model name="br.com.seatecnologia.todolist.model.Task">
+		<field name="uuid" type="String" />
+		<field name="taskId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="title" type="String" />
+		<field name="description" type="String" />
+		<field name="isCompleted" type="boolean" />
+		<field name="isDeleted" type="boolean" />
+		<field name="dueDate" type="Date" />
+		<field name="imageId" type="long" />
+	</model>
+</model-hints>

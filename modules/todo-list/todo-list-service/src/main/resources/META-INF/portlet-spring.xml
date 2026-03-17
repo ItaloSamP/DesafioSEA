@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<beans
+	default-destroy-method="destroy"
+	default-init-method="afterPropertiesSet"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+>
+	<bean class="br.com.seatecnologia.todolist.service.impl.SubtaskLocalServiceImpl" id="br.com.seatecnologia.todolist.service.SubtaskLocalService" />
+	<bean class="br.com.seatecnologia.todolist.service.persistence.impl.SubtaskModelArgumentsResolver" id="br.com.seatecnologia.todolist.service.persistence.impl.SubtaskModelArgumentsResolver" />
+	<bean class="br.com.seatecnologia.todolist.service.persistence.impl.SubtaskPersistenceImpl" id="br.com.seatecnologia.todolist.service.persistence.SubtaskPersistence" />
+	<bean class="br.com.seatecnologia.todolist.service.impl.TaskLocalServiceImpl" id="br.com.seatecnologia.todolist.service.TaskLocalService" />
+	<bean class="br.com.seatecnologia.todolist.service.persistence.impl.TaskModelArgumentsResolver" id="br.com.seatecnologia.todolist.service.persistence.impl.TaskModelArgumentsResolver" />
+	<bean class="br.com.seatecnologia.todolist.service.persistence.impl.TaskPersistenceImpl" id="br.com.seatecnologia.todolist.service.persistence.TaskPersistence" />
+</beans>
