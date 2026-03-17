@@ -55,6 +55,28 @@ public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
     }
 
     /**
+     * Método para atualizar os dados de uma tarefa existente;
+     */
+
+    public Task updateTask(long taskId, String title, String description, Date dueDate, long imageId) throws PortalException {
+        // 1. Busca a tarefa existente pelo seu ID
+        Task task = taskPersistence.findByPrimaryKey(taskId);
+
+        // 2. Atualiza os campos editáveis
+        task.setTitle(title);
+        task.setDescription(description);
+        task.setDueDate(dueDate);
+        task.setImageId(imageId);
+
+        // 3. Atualiza a data de modificação para o momento atual
+        task.setModifiedDate(new Date());
+
+        // 4. Salva de fato no banco de dados e retorna a tarefa salva
+        return taskPersistence.update(task);
+
+    }
+
+    /**
      * Método de exclusão lógica (Soft Delete).
      * Em vez de apagar do banco definitivamente, mudamos a flag isDeleted para verdadeiro (true).
      */

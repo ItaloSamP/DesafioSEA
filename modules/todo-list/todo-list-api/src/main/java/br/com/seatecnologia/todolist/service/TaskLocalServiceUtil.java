@@ -374,6 +374,18 @@ public class TaskLocalServiceUtil {
 	}
 
 	/**
+	 * Método para atualizar os dados de uma tarefa existente;
+	 */
+	public static Task updateTask(
+			long taskId, String title, String description,
+			java.util.Date dueDate, long imageId)
+		throws PortalException {
+
+		return getService().updateTask(
+			taskId, title, description, dueDate, imageId);
+	}
+
+	/**
 	 * Updates the task in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * <p>

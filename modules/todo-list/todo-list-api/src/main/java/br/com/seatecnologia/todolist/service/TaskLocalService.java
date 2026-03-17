@@ -335,6 +335,14 @@ public interface TaskLocalService
 	public Task toggleTaskStatus(long taskId) throws PortalException;
 
 	/**
+	 * Método para atualizar os dados de uma tarefa existente;
+	 */
+	public Task updateTask(
+			long taskId, String title, String description, Date dueDate,
+			long imageId)
+		throws PortalException;
+
+	/**
 	 * Updates the task in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * <p>

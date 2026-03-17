@@ -426,6 +426,19 @@ public class TaskLocalServiceWrapper
 	}
 
 	/**
+	 * Método para atualizar os dados de uma tarefa existente;
+	 */
+	@Override
+	public br.com.seatecnologia.todolist.model.Task updateTask(
+			long taskId, String title, String description,
+			java.util.Date dueDate, long imageId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _taskLocalService.updateTask(
+			taskId, title, description, dueDate, imageId);
+	}
+
+	/**
 	 * Updates the task in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * <p>
