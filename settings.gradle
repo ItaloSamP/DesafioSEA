@@ -11,6 +11,6 @@ buildscript {
 
 apply plugin: "com.liferay.workspace"
 
-include "modules:todo-list:todo-list-api"
-include "modules:todo-list:todo-list-service"
-include "modules:todo-list:todo-list-web"
+include "modules:todo-list-api"
+include "modules:todo-list-service"
+include "modules:todo-list-web"

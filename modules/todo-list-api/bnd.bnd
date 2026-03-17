@@ -1,0 +1,8 @@
+Bundle-Name: todo-list-api
+Bundle-SymbolicName: br.com.seatecnologia.todolist.api
+Bundle-Version: 1.0.0
+Export-Package: \
+	br.com.seatecnologia.todolist.exception,\
+	br.com.seatecnologia.todolist.model,\
+	br.com.seatecnologia.todolist.service,\
+	br.com.seatecnologia.todolist.service.persistence

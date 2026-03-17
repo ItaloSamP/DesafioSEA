@@ -1,0 +1,11 @@
+dependencies {
+	compileOnly group: "com.liferay.portal", name: "release.portal.api", version: "7.4.3.112-ga112"
+	
+	// Atualizamos o caminho aqui tirando a pasta extra:
+	compileOnly project(":modules:todo-list-api")
+}
+
+buildService {
+	// Como agora elas estão lado a lado, o caminho relativo fica perfeito:
+	apiDir = "../todo-list-api/src/main/java"
+}

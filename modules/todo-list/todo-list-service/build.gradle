@@ -1,9 +1,0 @@
-apply plugin: "com.liferay.portal.tools.service.builder"
-
-dependencies {
-    compileOnly project(":modules:todo-list:todo-list-api")
-}
-
-buildService {
-    apiDir = "../todo-list-api/src/main/java"
-}
