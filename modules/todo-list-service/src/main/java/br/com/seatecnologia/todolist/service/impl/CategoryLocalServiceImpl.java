@@ -71,7 +71,7 @@ public class CategoryLocalServiceImpl extends CategoryLocalServiceBaseImpl {
     /**
      * Remove uma categoria. Tarefas vinculadas ficam com categoryId = 0 (sem categoria).
      */
-    public void deleteCategory(long categoryId) throws PortalException {
-        categoryPersistence.remove(categoryId);
+    public Category deleteCategory(long categoryId) throws PortalException {
+        return categoryPersistence.remove(categoryId);
     }
 }
