@@ -1,16 +1,22 @@
 package br.com.seatecnologia.todolist.portlet;
 
+import br.com.seatecnologia.todolist.model.Category;
 import br.com.seatecnologia.todolist.model.Task;
+import br.com.seatecnologia.todolist.service.CategoryLocalServiceUtil;
 import br.com.seatecnologia.todolist.service.TaskLocalServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
@@ -48,16 +54,65 @@ public class TodoListMVCPortlet extends MVCPortlet {
             ThemeDisplay themeDisplay =
                 (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-            long userId = themeDisplay.getUserId();
+            long userId  = themeDisplay.getUserId();
             long groupId = themeDisplay.getScopeGroupId();
 
-            // Passa dados do usuário para a view
             renderRequest.setAttribute("userId", userId);
             renderRequest.setAttribute("userName", themeDisplay.getUser().getFullName());
 
-            // Carrega a lista de tarefas ativas do usuário e passa para a view
-            List<Task> tasks = TaskLocalServiceUtil.getActiveTasksByUserId(groupId, userId);
+            // Carrega categorias do usuário (usada na view.jsp e no edit_task.jsp)
+            List<Category> categories =
+                CategoryLocalServiceUtil.getCategoriesByUserId(groupId, userId);
+            renderRequest.setAttribute("categories", categories);
+
+            // Todas as tarefas ativas (sem filtro) — base para contadores
+            List<Task> allTasks =
+                TaskLocalServiceUtil.getActiveTasksByUserId(groupId, userId);
+
+            // Aplica filtro de status/categoria conforme parâmetro da URL
+            String filter = ParamUtil.getString(renderRequest, "filter", "all");
+            renderRequest.setAttribute("filter", filter);
+
+            List<Task> tasks;
+            if ("pending".equals(filter)) {
+                tasks = allTasks.stream()
+                    .filter(t -> !t.getIsCompleted())
+                    .collect(Collectors.toList());
+            } else if ("done".equals(filter)) {
+                tasks = allTasks.stream()
+                    .filter(t -> t.getIsCompleted())
+                    .collect(Collectors.toList());
+            } else if ("no-category".equals(filter)) {
+                tasks = allTasks.stream()
+                    .filter(t -> t.getCategoryId() == 0)
+                    .collect(Collectors.toList());
+            } else if (filter.startsWith("categoryId:")) {
+                long catId = Long.parseLong(filter.substring("categoryId:".length()));
+                tasks = allTasks.stream()
+                    .filter(t -> t.getCategoryId() == catId)
+                    .collect(Collectors.toList());
+            } else {
+                tasks = allTasks;
+            }
+
             renderRequest.setAttribute("tasks", tasks);
+
+            // Contadores por categoria (sempre calculado sobre TODAS as tarefas ativas)
+            Map<String, Long> categoryCounters = new LinkedHashMap<>();
+            for (Category cat : categories) {
+                long count = allTasks.stream()
+                    .filter(t -> t.getCategoryId() == cat.getCategoryId())
+                    .count();
+                if (count > 0) {
+                    categoryCounters.put(cat.getName(), count);
+                }
+            }
+            long noCategoryCount = allTasks.stream()
+                .filter(t -> t.getCategoryId() == 0)
+                .count();
+            categoryCounters.put("Sem categoria", noCategoryCount);
+
+            renderRequest.setAttribute("categoryCounters", categoryCounters);
 
         } catch (Exception e) {
             _log.error("Erro ao carregar dados do portlet", e);

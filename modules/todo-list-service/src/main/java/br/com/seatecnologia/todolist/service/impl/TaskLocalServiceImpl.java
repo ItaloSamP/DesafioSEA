@@ -15,65 +15,65 @@ import java.util.List;
 public class TaskLocalServiceImpl extends TaskLocalServiceBaseImpl {
 
     /**
-     * Método para criar uma nova tarefa.
+     * Cria uma nova tarefa sem categoria (compatibilidade retroativa).
      */
     public Task addTask(long userId, long groupId, String title, String description, Date dueDate, long imageId) throws PortalException {
-        
-        // Gera um ID único para a nova tarefa usando o contador do Liferay
-        long taskId = counterLocalService.increment(Task.class.getName());
+        return addTask(userId, groupId, title, description, dueDate, imageId, 0);
+    }
 
-        // Cria o objeto da tarefa vazio na memória
+    /**
+     * Cria uma nova tarefa vinculada a uma categoria.
+     */
+    public Task addTask(long userId, long groupId, String title, String description, Date dueDate, long imageId, long categoryId) throws PortalException {
+
+        long taskId = counterLocalService.increment(Task.class.getName());
         Task task = taskPersistence.create(taskId);
 
-        // Busca quem é o usuário logado que está criando a tarefa
         User user = UserLocalServiceUtil.getUser(userId);
 
-        // --- Setters de Sistema e Liferay ---
         task.setGroupId(groupId);
         task.setCompanyId(user.getCompanyId());
         task.setUserId(userId);
         task.setUserName(user.getFullName());
-        
-        // --- Setters de Auditoria (Datas) ---
+
         Date now = new Date();
         task.setCreateDate(now);
         task.setModifiedDate(now);
 
-        // --- Nossos campos de negócio ---
         task.setTitle(title);
         task.setDescription(description);
         task.setDueDate(dueDate);
         task.setImageId(imageId);
-        
-        // Variáveis booleanas (só aceitam verdadeiro ou falso). 
-        // Uma tarefa recém-criada nasce pendente (false) e ativa/não-deletada (false).
-        task.setIsCompleted(false); 
-        task.setIsDeleted(false); 
+        task.setCategoryId(categoryId);
 
-        // Salva de fato no banco de dados e retorna a tarefa salva
+        task.setIsCompleted(false);
+        task.setIsDeleted(false);
+
         return taskPersistence.update(task);
     }
 
     /**
-     * Método para atualizar os dados de uma tarefa existente;
+     * Atualiza os dados de uma tarefa (compatibilidade retroativa, sem categoria).
      */
-
     public Task updateTask(long taskId, String title, String description, Date dueDate, long imageId) throws PortalException {
-        // 1. Busca a tarefa existente pelo seu ID
+        Task task = taskPersistence.findByPrimaryKey(taskId);
+        return updateTask(taskId, title, description, dueDate, imageId, task.getCategoryId());
+    }
+
+    /**
+     * Atualiza os dados de uma tarefa, incluindo a categoria.
+     */
+    public Task updateTask(long taskId, String title, String description, Date dueDate, long imageId, long categoryId) throws PortalException {
         Task task = taskPersistence.findByPrimaryKey(taskId);
 
-        // 2. Atualiza os campos editáveis
         task.setTitle(title);
         task.setDescription(description);
         task.setDueDate(dueDate);
         task.setImageId(imageId);
-
-        // 3. Atualiza a data de modificação para o momento atual
+        task.setCategoryId(categoryId);
         task.setModifiedDate(new Date());
 
-        // 4. Salva de fato no banco de dados e retorna a tarefa salva
         return taskPersistence.update(task);
-
     }
 
     /**

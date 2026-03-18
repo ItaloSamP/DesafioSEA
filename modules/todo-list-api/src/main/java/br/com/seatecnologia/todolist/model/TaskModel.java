@@ -294,6 +294,20 @@ public interface TaskModel
 	 */
 	public void setImageId(long imageId);
 
+	/**
+	 * Returns the category ID of this task.
+	 *
+	 * @return the category ID of this task
+	 */
+	public long getCategoryId();
+
+	/**
+	 * Sets the category ID of this task.
+	 *
+	 * @param categoryId the category ID of this task
+	 */
+	public void setCategoryId(long categoryId);
+
 	@Override
 	public Task cloneWithOriginalValues();
 

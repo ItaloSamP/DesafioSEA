@@ -52,7 +52,7 @@ public class TaskCacheModel implements CacheModel<Task>, Externalizable {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -82,6 +82,8 @@ public class TaskCacheModel implements CacheModel<Task>, Externalizable {
 		sb.append(dueDate);
 		sb.append(", imageId=");
 		sb.append(imageId);
+		sb.append(", categoryId=");
+		sb.append(categoryId);
 		sb.append("}");
 
 		return sb.toString();
@@ -149,6 +151,7 @@ public class TaskCacheModel implements CacheModel<Task>, Externalizable {
 		}
 
 		taskImpl.setImageId(imageId);
+		taskImpl.setCategoryId(categoryId);
 
 		taskImpl.resetOriginalValues();
 
@@ -178,6 +181,8 @@ public class TaskCacheModel implements CacheModel<Task>, Externalizable {
 		dueDate = objectInput.readLong();
 
 		imageId = objectInput.readLong();
+
+		categoryId = objectInput.readLong();
 	}
 
 	@Override
@@ -227,6 +232,8 @@ public class TaskCacheModel implements CacheModel<Task>, Externalizable {
 		objectOutput.writeLong(dueDate);
 
 		objectOutput.writeLong(imageId);
+
+		objectOutput.writeLong(categoryId);
 	}
 
 	public String uuid;
@@ -243,5 +250,6 @@ public class TaskCacheModel implements CacheModel<Task>, Externalizable {
 	public boolean isDeleted;
 	public long dueDate;
 	public long imageId;
+	public long categoryId;
 
 }

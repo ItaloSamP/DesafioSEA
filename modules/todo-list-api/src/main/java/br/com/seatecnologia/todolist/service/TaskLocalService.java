@@ -70,6 +70,14 @@ public interface TaskLocalService
 		throws PortalException;
 
 	/**
+	 * Método para criar uma nova tarefa vinculada a uma categoria.
+	 */
+	public Task addTask(
+			long userId, long groupId, String title, String description,
+			Date dueDate, long imageId, long categoryId)
+		throws PortalException;
+
+	/**
 	 * Adds the task to the database. Also notifies the appropriate model listeners.
 	 *
 	 * <p>
@@ -340,6 +348,14 @@ public interface TaskLocalService
 	public Task updateTask(
 			long taskId, String title, String description, Date dueDate,
 			long imageId)
+		throws PortalException;
+
+	/**
+	 * Método para atualizar os dados de uma tarefa existente, incluindo categoria.
+	 */
+	public Task updateTask(
+			long taskId, String title, String description, Date dueDate,
+			long imageId, long categoryId)
 		throws PortalException;
 
 	/**

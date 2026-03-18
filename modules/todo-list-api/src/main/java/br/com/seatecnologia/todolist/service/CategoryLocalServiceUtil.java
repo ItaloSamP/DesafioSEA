@@ -38,6 +38,15 @@ public class CategoryLocalServiceUtil {
 	 */
 
 	/**
+	 * Cria uma nova categoria para o usuário no grupo.
+	 */
+	public static Category addCategory(long userId, long groupId, String name)
+		throws PortalException {
+
+		return getService().addCategory(userId, groupId, name);
+	}
+
+	/**
 	 * Adds the category to the database. Also notifies the appropriate model listeners.
 	 *
 	 * <p>
@@ -332,6 +341,24 @@ public class CategoryLocalServiceUtil {
 		throws PortalException {
 
 		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	/**
+	 * Busca todas as categorias do usuário no grupo.
+	 */
+	public static java.util.List<Category> getCategoriesByUserId(
+		long groupId, long userId) {
+
+		return getService().getCategoriesByUserId(groupId, userId);
+	}
+
+	/**
+	 * Renomeia uma categoria existente.
+	 */
+	public static Category updateCategory(long categoryId, String name)
+		throws PortalException {
+
+		return getService().updateCategory(categoryId, name);
 	}
 
 	/**

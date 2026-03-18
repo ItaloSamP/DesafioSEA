@@ -72,8 +72,10 @@ public class AddTaskMVCActionCommand extends BaseMVCActionCommand {
             }
         }
 
+        long categoryId = ParamUtil.getLong(actionRequest, "categoryId");
+
         try {
-            TaskLocalServiceUtil.addTask(userId, groupId, title, description, dueDate, 0);
+            TaskLocalServiceUtil.addTask(userId, groupId, title, description, dueDate, 0, categoryId);
             SessionMessages.add(actionRequest, "task-added");
             hideDefaultSuccessMessage(actionRequest);
         } catch (Exception e) {

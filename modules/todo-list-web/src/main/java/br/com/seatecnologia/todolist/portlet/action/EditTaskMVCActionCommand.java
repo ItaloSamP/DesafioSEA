@@ -80,7 +80,9 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
             }
         }
 
-        TaskLocalServiceUtil.updateTask(taskId, title, description, dueDate, task.getImageId());
+        long categoryId = ParamUtil.getLong(actionRequest, "categoryId");
+
+        TaskLocalServiceUtil.updateTask(taskId, title, description, dueDate, task.getImageId(), categoryId);
 
         SessionMessages.add(actionRequest, "task-updated");
     }

@@ -19,6 +19,7 @@
         <column name="isCompleted" type="boolean" />
         <column name="isDeleted" type="boolean" /> <column name="dueDate" type="Date" />
         <column name="imageId" type="long" />
+        <column name="categoryId" type="long" />
 
         <order by="asc">
             <order-column name="dueDate" />

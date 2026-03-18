@@ -29,6 +29,17 @@ public class CategoryLocalServiceWrapper
 	}
 
 	/**
+	 * Cria uma nova categoria para o usuário no grupo.
+	 */
+	@Override
+	public br.com.seatecnologia.todolist.model.Category addCategory(
+			long userId, long groupId, String name)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _categoryLocalService.addCategory(userId, groupId, name);
+	}
+
+	/**
 	 * Adds the category to the database. Also notifies the appropriate model listeners.
 	 *
 	 * <p>
@@ -391,6 +402,27 @@ public class CategoryLocalServiceWrapper
 	 * @param category the category
 	 * @return the category that was updated
 	 */
+	/**
+	 * Busca todas as categorias do usuário no grupo.
+	 */
+	@Override
+	public java.util.List<br.com.seatecnologia.todolist.model.Category>
+		getCategoriesByUserId(long groupId, long userId) {
+
+		return _categoryLocalService.getCategoriesByUserId(groupId, userId);
+	}
+
+	/**
+	 * Renomeia uma categoria existente.
+	 */
+	@Override
+	public br.com.seatecnologia.todolist.model.Category updateCategory(
+			long categoryId, String name)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _categoryLocalService.updateCategory(categoryId, name);
+	}
+
 	@Override
 	public br.com.seatecnologia.todolist.model.Category updateCategory(
 		br.com.seatecnologia.todolist.model.Category category) {

@@ -51,6 +51,8 @@ public class TaskTable extends BaseTable<TaskTable> {
 		"dueDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
 	public final Column<TaskTable, Long> imageId = createColumn(
 		"imageId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<TaskTable, Long> categoryId = createColumn(
+		"categoryId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 
 	private TaskTable() {
 		super("SEA_Task", TaskTable::new);

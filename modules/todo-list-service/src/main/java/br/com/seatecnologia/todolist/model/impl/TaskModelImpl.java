@@ -69,7 +69,8 @@ public class TaskModelImpl extends BaseModelImpl<Task> implements TaskModel {
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"title", Types.VARCHAR}, {"description", Types.VARCHAR},
 		{"isCompleted", Types.BOOLEAN}, {"isDeleted", Types.BOOLEAN},
-		{"dueDate", Types.TIMESTAMP}, {"imageId", Types.BIGINT}
+		{"dueDate", Types.TIMESTAMP}, {"imageId", Types.BIGINT},
+		{"categoryId", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -90,10 +91,11 @@ public class TaskModelImpl extends BaseModelImpl<Task> implements TaskModel {
 		TABLE_COLUMNS_MAP.put("isDeleted", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("dueDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("imageId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("categoryId", Types.BIGINT);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table SEA_Task (uuid_ VARCHAR(75) null,taskId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,title VARCHAR(75) null,description VARCHAR(75) null,isCompleted BOOLEAN,isDeleted BOOLEAN,dueDate DATE null,imageId LONG)";
+		"create table SEA_Task (uuid_ VARCHAR(75) null,taskId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,title VARCHAR(75) null,description VARCHAR(75) null,isCompleted BOOLEAN,isDeleted BOOLEAN,dueDate DATE null,imageId LONG,categoryId LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table SEA_Task";
 
@@ -279,6 +281,7 @@ public class TaskModelImpl extends BaseModelImpl<Task> implements TaskModel {
 			attributeGetterFunctions.put("isDeleted", Task::getIsDeleted);
 			attributeGetterFunctions.put("dueDate", Task::getDueDate);
 			attributeGetterFunctions.put("imageId", Task::getImageId);
+			attributeGetterFunctions.put("categoryId", Task::getCategoryId);
 
 			_attributeGetterFunctions = Collections.unmodifiableMap(
 				attributeGetterFunctions);
@@ -323,6 +326,8 @@ public class TaskModelImpl extends BaseModelImpl<Task> implements TaskModel {
 				"dueDate", (BiConsumer<Task, Date>)Task::setDueDate);
 			attributeSetterBiConsumers.put(
 				"imageId", (BiConsumer<Task, Long>)Task::setImageId);
+			attributeSetterBiConsumers.put(
+				"categoryId", (BiConsumer<Task, Long>)Task::setCategoryId);
 
 			_attributeSetterBiConsumers = Collections.unmodifiableMap(
 				(Map)attributeSetterBiConsumers);
@@ -626,6 +631,20 @@ public class TaskModelImpl extends BaseModelImpl<Task> implements TaskModel {
 	}
 
 	@Override
+	public long getCategoryId() {
+		return _categoryId;
+	}
+
+	@Override
+	public void setCategoryId(long categoryId) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_categoryId = categoryId;
+	}
+
+	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
 			PortalUtil.getClassNameId(Task.class.getName()));
@@ -701,6 +720,7 @@ public class TaskModelImpl extends BaseModelImpl<Task> implements TaskModel {
 		taskImpl.setIsDeleted(isIsDeleted());
 		taskImpl.setDueDate(getDueDate());
 		taskImpl.setImageId(getImageId());
+		taskImpl.setCategoryId(getCategoryId());
 
 		taskImpl.resetOriginalValues();
 
@@ -729,6 +749,7 @@ public class TaskModelImpl extends BaseModelImpl<Task> implements TaskModel {
 			this.<Boolean>getColumnOriginalValue("isDeleted"));
 		taskImpl.setDueDate(this.<Date>getColumnOriginalValue("dueDate"));
 		taskImpl.setImageId(this.<Long>getColumnOriginalValue("imageId"));
+		taskImpl.setCategoryId(this.<Long>getColumnOriginalValue("categoryId"));
 
 		return taskImpl;
 	}
@@ -883,6 +904,8 @@ public class TaskModelImpl extends BaseModelImpl<Task> implements TaskModel {
 
 		taskCacheModel.imageId = getImageId();
 
+		taskCacheModel.categoryId = getCategoryId();
+
 		return taskCacheModel;
 	}
 
@@ -958,6 +981,7 @@ public class TaskModelImpl extends BaseModelImpl<Task> implements TaskModel {
 	private boolean _isDeleted;
 	private Date _dueDate;
 	private long _imageId;
+	private long _categoryId;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1003,6 +1027,7 @@ public class TaskModelImpl extends BaseModelImpl<Task> implements TaskModel {
 		_columnOriginalValues.put("isDeleted", _isDeleted);
 		_columnOriginalValues.put("dueDate", _dueDate);
 		_columnOriginalValues.put("imageId", _imageId);
+		_columnOriginalValues.put("categoryId", _categoryId);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1053,6 +1078,8 @@ public class TaskModelImpl extends BaseModelImpl<Task> implements TaskModel {
 		columnBitmasks.put("dueDate", 4096L);
 
 		columnBitmasks.put("imageId", 8192L);
+
+		columnBitmasks.put("categoryId", 16384L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

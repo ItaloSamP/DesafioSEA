@@ -61,6 +61,12 @@ public interface CategoryLocalService
 	 */
 
 	/**
+	 * Cria uma nova categoria para o usuário no grupo.
+	 */
+	public Category addCategory(long userId, long groupId, String name)
+		throws PortalException;
+
+	/**
 	 * Adds the category to the database. Also notifies the appropriate model listeners.
 	 *
 	 * <p>
@@ -300,6 +306,18 @@ public interface CategoryLocalService
 	@Override
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException;
+
+	/**
+	 * Busca todas as categorias do usuário no grupo.
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Category> getCategoriesByUserId(long groupId, long userId);
+
+	/**
+	 * Renomeia uma categoria existente.
+	 */
+	public Category updateCategory(long categoryId, String name)
 		throws PortalException;
 
 	/**

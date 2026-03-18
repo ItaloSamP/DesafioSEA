@@ -50,6 +50,18 @@ public class TaskLocalServiceUtil {
 	}
 
 	/**
+	 * Método para criar uma nova tarefa vinculada a uma categoria.
+	 */
+	public static Task addTask(
+			long userId, long groupId, String title, String description,
+			java.util.Date dueDate, long imageId, long categoryId)
+		throws PortalException {
+
+		return getService().addTask(
+			userId, groupId, title, description, dueDate, imageId, categoryId);
+	}
+
+	/**
 	 * Adds the task to the database. Also notifies the appropriate model listeners.
 	 *
 	 * <p>
@@ -383,6 +395,18 @@ public class TaskLocalServiceUtil {
 
 		return getService().updateTask(
 			taskId, title, description, dueDate, imageId);
+	}
+
+	/**
+	 * Método para atualizar os dados de uma tarefa existente, incluindo categoria.
+	 */
+	public static Task updateTask(
+			long taskId, String title, String description,
+			java.util.Date dueDate, long imageId, long categoryId)
+		throws PortalException {
+
+		return getService().updateTask(
+			taskId, title, description, dueDate, imageId, categoryId);
 	}
 
 	/**

@@ -47,6 +47,7 @@ public class TaskWrapper
 		attributes.put("isDeleted", isIsDeleted());
 		attributes.put("dueDate", getDueDate());
 		attributes.put("imageId", getImageId());
+		attributes.put("categoryId", getCategoryId());
 
 		return attributes;
 	}
@@ -135,6 +136,12 @@ public class TaskWrapper
 
 		if (imageId != null) {
 			setImageId(imageId);
+		}
+
+		Long categoryId = (Long)attributes.get("categoryId");
+
+		if (categoryId != null) {
+			setCategoryId(categoryId);
 		}
 	}
 
@@ -386,6 +393,26 @@ public class TaskWrapper
 	@Override
 	public void setImageId(long imageId) {
 		model.setImageId(imageId);
+	}
+
+	/**
+	 * Returns the category ID of this task.
+	 *
+	 * @return the category ID of this task
+	 */
+	@Override
+	public long getCategoryId() {
+		return model.getCategoryId();
+	}
+
+	/**
+	 * Sets the category ID of this task.
+	 *
+	 * @param categoryId the category ID of this task
+	 */
+	@Override
+	public void setCategoryId(long categoryId) {
+		model.setCategoryId(categoryId);
 	}
 
 	/**

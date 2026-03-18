@@ -1,7 +1,9 @@
 package br.com.seatecnologia.todolist.portlet.render;
 
+import br.com.seatecnologia.todolist.model.Category;
 import br.com.seatecnologia.todolist.model.Task;
 import br.com.seatecnologia.todolist.portlet.TodoListMVCPortlet;
+import br.com.seatecnologia.todolist.service.CategoryLocalServiceUtil;
 import br.com.seatecnologia.todolist.service.TaskLocalServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -10,6 +12,8 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+
+import java.util.List;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -29,24 +33,35 @@ public class EditTaskMVCRenderCommand implements MVCRenderCommand {
     @Override
     public String render(RenderRequest renderRequest, RenderResponse renderResponse) {
 
-        long taskId = ParamUtil.getLong(renderRequest, "taskId");
+        ThemeDisplay themeDisplay =
+            (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+        long taskId  = ParamUtil.getLong(renderRequest, "taskId");
+        long userId  = themeDisplay.getUserId();
+        long groupId = themeDisplay.getScopeGroupId();
 
         if (taskId > 0) {
             try {
-                ThemeDisplay themeDisplay =
-                    (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
-
                 Task task = TaskLocalServiceUtil.getTask(taskId);
 
-                if (task.getUserId() == themeDisplay.getUserId()) {
+                if (task.getUserId() == userId) {
                     renderRequest.setAttribute("task", task);
                 } else {
-                    _log.warn("Usuário " + themeDisplay.getUserId() +
+                    _log.warn("Usuário " + userId +
                         " tentou editar tarefa " + taskId + " de outro usuário.");
                 }
             } catch (Exception e) {
                 _log.warn("Tarefa não encontrada: " + taskId, e);
             }
+        }
+
+        // Carrega categorias para popular o select no formulário
+        try {
+            List<Category> categories =
+                CategoryLocalServiceUtil.getCategoriesByUserId(groupId, userId);
+            renderRequest.setAttribute("categories", categories);
+        } catch (Exception e) {
+            _log.warn("Erro ao carregar categorias para edição de tarefa", e);
         }
 
         return "/edit_task.jsp";

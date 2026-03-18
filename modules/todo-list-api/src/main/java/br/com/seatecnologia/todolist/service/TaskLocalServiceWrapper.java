@@ -40,6 +40,19 @@ public class TaskLocalServiceWrapper
 	}
 
 	/**
+	 * Método para criar uma nova tarefa vinculada a uma categoria.
+	 */
+	@Override
+	public br.com.seatecnologia.todolist.model.Task addTask(
+			long userId, long groupId, String title, String description,
+			java.util.Date dueDate, long imageId, long categoryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _taskLocalService.addTask(
+			userId, groupId, title, description, dueDate, imageId, categoryId);
+	}
+
+	/**
 	 * Adds the task to the database. Also notifies the appropriate model listeners.
 	 *
 	 * <p>
@@ -436,6 +449,19 @@ public class TaskLocalServiceWrapper
 
 		return _taskLocalService.updateTask(
 			taskId, title, description, dueDate, imageId);
+	}
+
+	/**
+	 * Método para atualizar os dados de uma tarefa existente, incluindo categoria.
+	 */
+	@Override
+	public br.com.seatecnologia.todolist.model.Task updateTask(
+			long taskId, String title, String description,
+			java.util.Date dueDate, long imageId, long categoryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _taskLocalService.updateTask(
+			taskId, title, description, dueDate, imageId, categoryId);
 	}
 
 	/**

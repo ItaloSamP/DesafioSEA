@@ -47,5 +47,6 @@ create table SEA_Task (
 	isCompleted BOOLEAN,
 	isDeleted BOOLEAN,
 	dueDate DATE null,
-	imageId LONG
+	imageId LONG,
+	categoryId LONG
 );
