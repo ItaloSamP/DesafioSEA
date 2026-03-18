@@ -1,0 +1,6 @@
+Bundle-Name: todo-list-web
+Bundle-SymbolicName: br.com.seatecnologia.todolist.web
+Bundle-Version: 1.0.0
+Liferay-Releng-Module-Group-Description:
+Liferay-Releng-Module-Group-Title: Todo List
+Web-ContextPath: /todo-list-web
