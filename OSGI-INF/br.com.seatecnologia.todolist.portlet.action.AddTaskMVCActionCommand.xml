@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="br.com.seatecnologia.todolist.portlet.action.AddTaskMVCActionCommand" immediate="true">
+  <property name="javax.portlet.name" type="String" value="br_com_seatecnologia_todolist_portlet_TodoListMVCPortlet"/>
+  <property name="mvc.command.name" type="String" value="/todolist/add_task"/>
+  <service>
+    <provide interface="com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand"/>
+  </service>
+  <implementation class="br.com.seatecnologia.todolist.portlet.action.AddTaskMVCActionCommand"/>
+</scr:component>
