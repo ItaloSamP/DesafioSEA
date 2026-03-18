@@ -1,3 +1,9 @@
+create index IX_C9F611F0 on SEA_Category (groupId, userId);
+create unique index IX_86B954EA on SEA_Category (uuid_[$COLUMN_LENGTH:75$], groupId);
+
+create index IX_823B3229 on SEA_Comment (taskId);
+create unique index IX_BECEEDAB on SEA_Comment (uuid_[$COLUMN_LENGTH:75$], groupId);
+
 create index IX_5749100F on SEA_Subtask (taskId);
 create index IX_C4A2FF39 on SEA_Subtask (uuid_[$COLUMN_LENGTH:75$]);
 

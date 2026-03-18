@@ -50,4 +50,39 @@
             <finder-column name="taskId" />
         </finder>
     </entity>
+
+
+    <entity local-service="true" name="Category" remote-service="false" uuid="true">
+        <column name="categoryId" primary="true" type="long" />
+        <column name="groupId" type="long" />
+        <column name="companyId" type="long" />
+        <column name="userId" type="long" />
+        <column name="userName" type="String" />
+        <column name="createDate" type="Date" />
+        <column name="modifiedDate" type="Date" />
+        
+        <column name="name" type="String" />
+        
+        <finder name="UserCategories" return-type="Collection">
+            <finder-column name="groupId" />
+            <finder-column name="userId" />
+        </finder>
+    </entity>
+
+    <entity local-service="true" name="Comment" remote-service="false" uuid="true">
+        <column name="commentId" primary="true" type="long" />
+        <column name="groupId" type="long" />
+        <column name="companyId" type="long" />
+        <column name="userId" type="long" />
+        <column name="userName" type="String" />
+        <column name="createDate" type="Date" />
+        <column name="modifiedDate" type="Date" />
+        
+        <column name="taskId" type="long" />
+        <column name="text" type="String" />
+        
+        <finder name="TaskComments" return-type="Collection">
+            <finder-column name="taskId" />
+        </finder>
+    </entity>
 </service-builder>

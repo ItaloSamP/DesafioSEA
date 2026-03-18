@@ -8,6 +8,8 @@ package br.com.seatecnologia.todolist.service.base;
 import br.com.seatecnologia.todolist.model.Subtask;
 import br.com.seatecnologia.todolist.service.SubtaskLocalService;
 import br.com.seatecnologia.todolist.service.SubtaskLocalServiceUtil;
+import br.com.seatecnologia.todolist.service.persistence.CategoryPersistence;
+import br.com.seatecnologia.todolist.service.persistence.CommentPersistence;
 import br.com.seatecnologia.todolist.service.persistence.SubtaskPersistence;
 import br.com.seatecnologia.todolist.service.persistence.TaskPersistence;
 
@@ -370,6 +372,90 @@ public abstract class SubtaskLocalServiceBaseImpl
 	}
 
 	/**
+	 * Returns the category local service.
+	 *
+	 * @return the category local service
+	 */
+	public br.com.seatecnologia.todolist.service.CategoryLocalService
+		getCategoryLocalService() {
+
+		return categoryLocalService;
+	}
+
+	/**
+	 * Sets the category local service.
+	 *
+	 * @param categoryLocalService the category local service
+	 */
+	public void setCategoryLocalService(
+		br.com.seatecnologia.todolist.service.CategoryLocalService
+			categoryLocalService) {
+
+		this.categoryLocalService = categoryLocalService;
+	}
+
+	/**
+	 * Returns the category persistence.
+	 *
+	 * @return the category persistence
+	 */
+	public CategoryPersistence getCategoryPersistence() {
+		return categoryPersistence;
+	}
+
+	/**
+	 * Sets the category persistence.
+	 *
+	 * @param categoryPersistence the category persistence
+	 */
+	public void setCategoryPersistence(
+		CategoryPersistence categoryPersistence) {
+
+		this.categoryPersistence = categoryPersistence;
+	}
+
+	/**
+	 * Returns the comment local service.
+	 *
+	 * @return the comment local service
+	 */
+	public br.com.seatecnologia.todolist.service.CommentLocalService
+		getCommentLocalService() {
+
+		return commentLocalService;
+	}
+
+	/**
+	 * Sets the comment local service.
+	 *
+	 * @param commentLocalService the comment local service
+	 */
+	public void setCommentLocalService(
+		br.com.seatecnologia.todolist.service.CommentLocalService
+			commentLocalService) {
+
+		this.commentLocalService = commentLocalService;
+	}
+
+	/**
+	 * Returns the comment persistence.
+	 *
+	 * @return the comment persistence
+	 */
+	public CommentPersistence getCommentPersistence() {
+		return commentPersistence;
+	}
+
+	/**
+	 * Sets the comment persistence.
+	 *
+	 * @param commentPersistence the comment persistence
+	 */
+	public void setCommentPersistence(CommentPersistence commentPersistence) {
+		this.commentPersistence = commentPersistence;
+	}
+
+	/**
 	 * Returns the subtask local service.
 	 *
 	 * @return the subtask local service
@@ -631,6 +717,24 @@ public abstract class SubtaskLocalServiceBaseImpl
 			throw new SystemException(exception);
 		}
 	}
+
+	@BeanReference(
+		type = br.com.seatecnologia.todolist.service.CategoryLocalService.class
+	)
+	protected br.com.seatecnologia.todolist.service.CategoryLocalService
+		categoryLocalService;
+
+	@BeanReference(type = CategoryPersistence.class)
+	protected CategoryPersistence categoryPersistence;
+
+	@BeanReference(
+		type = br.com.seatecnologia.todolist.service.CommentLocalService.class
+	)
+	protected br.com.seatecnologia.todolist.service.CommentLocalService
+		commentLocalService;
+
+	@BeanReference(type = CommentPersistence.class)
+	protected CommentPersistence commentPersistence;
 
 	@BeanReference(type = SubtaskLocalService.class)
 	protected SubtaskLocalService subtaskLocalService;

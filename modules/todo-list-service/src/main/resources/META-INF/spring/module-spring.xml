@@ -7,6 +7,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
 >
+	<bean class="br.com.seatecnologia.todolist.service.impl.CategoryLocalServiceImpl" id="br.com.seatecnologia.todolist.service.CategoryLocalService" />
+	<bean class="br.com.seatecnologia.todolist.service.persistence.impl.CategoryModelArgumentsResolver" id="br.com.seatecnologia.todolist.service.persistence.impl.CategoryModelArgumentsResolver" />
+	<bean class="br.com.seatecnologia.todolist.service.persistence.impl.CategoryPersistenceImpl" id="br.com.seatecnologia.todolist.service.persistence.CategoryPersistence" />
+	<bean class="br.com.seatecnologia.todolist.service.impl.CommentLocalServiceImpl" id="br.com.seatecnologia.todolist.service.CommentLocalService" />
+	<bean class="br.com.seatecnologia.todolist.service.persistence.impl.CommentModelArgumentsResolver" id="br.com.seatecnologia.todolist.service.persistence.impl.CommentModelArgumentsResolver" />
+	<bean class="br.com.seatecnologia.todolist.service.persistence.impl.CommentPersistenceImpl" id="br.com.seatecnologia.todolist.service.persistence.CommentPersistence" />
 	<bean class="br.com.seatecnologia.todolist.service.impl.SubtaskLocalServiceImpl" id="br.com.seatecnologia.todolist.service.SubtaskLocalService" />
 	<bean class="br.com.seatecnologia.todolist.service.persistence.impl.SubtaskModelArgumentsResolver" id="br.com.seatecnologia.todolist.service.persistence.impl.SubtaskModelArgumentsResolver" />
 	<bean class="br.com.seatecnologia.todolist.service.persistence.impl.SubtaskPersistenceImpl" id="br.com.seatecnologia.todolist.service.persistence.SubtaskPersistence" />
