@@ -2,13 +2,15 @@
 <%@ include file="/init.jsp" %>
 
 <%@ page import="br.com.seatecnologia.todolist.model.Category" %>
+<%@ page import="br.com.seatecnologia.todolist.service.CategoryLocalServiceUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
 <%@ page import="java.util.List" %>
 
 <%
-@SuppressWarnings("unchecked")
-List<Category> categories = (List<Category>) renderRequest.getAttribute("categories");
-if (categories == null) categories = new java.util.ArrayList<>();
+// Carrega diretamente do service para garantir dados frescos,
+// independente do ciclo de render do portlet.
+List<Category> categories = CategoryLocalServiceUtil.getCategoriesByUserId(
+    themeDisplay.getScopeGroupId(), themeDisplay.getUserId());
 %>
 
 <portlet:actionURL name="/todolist/add_category" var="addCategoryURL" />

@@ -54,6 +54,12 @@ public class TodoListMVCPortlet extends MVCPortlet {
             ThemeDisplay themeDisplay =
                 (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
+            // Usuário não autenticado: renderiza apenas a tela de login
+            if (!themeDisplay.isSignedIn()) {
+                super.doView(renderRequest, renderResponse);
+                return;
+            }
+
             long userId  = themeDisplay.getUserId();
             long groupId = themeDisplay.getScopeGroupId();
 

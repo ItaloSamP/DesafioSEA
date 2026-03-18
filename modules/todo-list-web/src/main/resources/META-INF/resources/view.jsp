@@ -9,6 +9,36 @@
 <%@ page import="java.util.Map" %>
 
 <%
+// themeDisplay já está disponível via <liferay-theme:defineObjects /> do init.jsp
+if (!themeDisplay.isSignedIn()) {
+%>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm text-center p-5">
+                <div style="font-size:3rem;">&#128274;</div>
+                <h3 class="mt-3 mb-2">Acesso restrito</h3>
+                <p class="text-muted mb-4">
+                    Fa&#231;a login para acessar sua lista de tarefas.
+                </p>
+                <a href="<%= themeDisplay.getURLSignIn() %>" class="btn btn-primary btn-lg mb-3">
+                    Entrar
+                </a>
+                <a href="/c/portal/register" class="btn btn-outline-secondary">
+                    Criar conta
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%
+    return;
+}
+%>
+
+<%
 @SuppressWarnings("unchecked")
 List<Task> tasks = (List<Task>) renderRequest.getAttribute("tasks");
 if (tasks == null) tasks = new java.util.ArrayList<>();

@@ -38,6 +38,12 @@ public class AddCategoryMVCActionCommand extends BaseMVCActionCommand {
         ThemeDisplay themeDisplay =
             (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
+        if (!themeDisplay.isSignedIn()) {
+            SessionErrors.add(actionRequest, "authentication-required");
+            hideDefaultErrorMessage(actionRequest);
+            return;
+        }
+
         long userId  = themeDisplay.getUserId();
         long groupId = themeDisplay.getScopeGroupId();
 

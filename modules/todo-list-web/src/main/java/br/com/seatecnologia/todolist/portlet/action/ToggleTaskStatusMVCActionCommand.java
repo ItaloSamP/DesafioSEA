@@ -38,6 +38,11 @@ public class ToggleTaskStatusMVCActionCommand extends BaseMVCActionCommand {
         ThemeDisplay themeDisplay =
             (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
+        if (!themeDisplay.isSignedIn()) {
+            SessionErrors.add(actionRequest, "authentication-required");
+            return;
+        }
+
         long userId = themeDisplay.getUserId();
         long taskId = ParamUtil.getLong(actionRequest, "taskId");
 
