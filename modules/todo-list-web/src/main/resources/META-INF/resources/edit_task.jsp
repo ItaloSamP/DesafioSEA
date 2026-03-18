@@ -1,3 +1,4 @@
+<%@ page pageEncoding="UTF-8" %>
 <%@ include file="/init.jsp" %>
 
 <%@ page import="br.com.seatecnologia.todolist.model.Task" %>
@@ -31,21 +32,20 @@ String actionCommand = isEdit ? "/todolist/edit_task" : "/todolist/add_task";
 
     <h2><%= isEdit ? "Editar Tarefa" : "Nova Tarefa" %></h2>
 
-    <liferay-ui:error key="task-title-required"   message="O título é obrigatório." />
-    <liferay-ui:error key="task-duedate-invalid"  message="Data de prazo inválida." />
-    <liferay-ui:error key="task-not-authorized"   message="Você não tem permissão para modificar esta tarefa." />
+    <liferay-ui:error key="task-title-required"   message="task-title-required" />
+    <liferay-ui:error key="task-duedate-invalid"  message="task-duedate-invalid" />
+    <liferay-ui:error key="task-not-authorized"   message="task-not-authorized" />
 
     <form action="<%= submitURL %>" method="post">
 
-        <%-- taskId é necessário apenas na edição, mas enviamos sempre (0 no modo criação) --%>
-        <input type="hidden" name="taskId" value="<%= taskId %>" />
+        <input type="hidden" name="<portlet:namespace />taskId" value="<%= taskId %>" />
 
         <div class="form-group">
-            <label for="title"><strong>Título *</strong></label>
+            <label for="<portlet:namespace />title"><strong>Título *</strong></label>
             <input
                 type="text"
-                id="title"
-                name="title"
+                id="<portlet:namespace />title"
+                name="<portlet:namespace />title"
                 class="form-control"
                 placeholder="Ex: Estudar Service Builder"
                 value="<%= titleValue %>"
@@ -54,10 +54,10 @@ String actionCommand = isEdit ? "/todolist/edit_task" : "/todolist/add_task";
         </div>
 
         <div class="form-group">
-            <label for="description">Descrição</label>
+            <label for="<portlet:namespace />description">Descrição</label>
             <textarea
-                id="description"
-                name="description"
+                id="<portlet:namespace />description"
+                name="<portlet:namespace />description"
                 class="form-control"
                 rows="3"
                 placeholder="Detalhes opcionais sobre a tarefa..."
@@ -65,11 +65,11 @@ String actionCommand = isEdit ? "/todolist/edit_task" : "/todolist/add_task";
         </div>
 
         <div class="form-group">
-            <label for="dueDate">Prazo</label>
+            <label for="<portlet:namespace />dueDate">Prazo</label>
             <input
                 type="date"
-                id="dueDate"
-                name="dueDate"
+                id="<portlet:namespace />dueDate"
+                name="<portlet:namespace />dueDate"
                 class="form-control"
                 value="<%= dueDateValue %>"
             />

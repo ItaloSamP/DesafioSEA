@@ -3,6 +3,8 @@ package br.com.seatecnologia.todolist.portlet.action;
 import br.com.seatecnologia.todolist.portlet.TodoListMVCPortlet;
 import br.com.seatecnologia.todolist.service.TaskLocalServiceUtil;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -45,7 +47,6 @@ public class AddTaskMVCActionCommand extends BaseMVCActionCommand {
         long userId  = themeDisplay.getUserId();
         long groupId = themeDisplay.getScopeGroupId();
 
-        // ParamUtil.getString é o jeito Liferay de ler parâmetros de form com segurança
         String title       = ParamUtil.getString(actionRequest, "title").trim();
         String description = ParamUtil.getString(actionRequest, "description");
         String dueDateStr  = ParamUtil.getString(actionRequest, "dueDate");
@@ -53,7 +54,7 @@ public class AddTaskMVCActionCommand extends BaseMVCActionCommand {
         // Validação: título é obrigatório
         if (Validator.isNull(title)) {
             SessionErrors.add(actionRequest, "task-title-required");
-            // Volta pro formulário em vez de renderizar a view principal
+            hideDefaultErrorMessage(actionRequest);
             actionResponse.setRenderParameter("mvcPath", "/edit_task.jsp");
             return;
         }
@@ -65,15 +66,23 @@ public class AddTaskMVCActionCommand extends BaseMVCActionCommand {
                 dueDate = new SimpleDateFormat("yyyy-MM-dd").parse(dueDateStr);
             } catch (Exception e) {
                 SessionErrors.add(actionRequest, "task-duedate-invalid");
+                hideDefaultErrorMessage(actionRequest);
                 actionResponse.setRenderParameter("mvcPath", "/edit_task.jsp");
                 return;
             }
         }
 
-        // imageId = 0 por enquanto (será usado em sprint futura com upload de imagem)
-        TaskLocalServiceUtil.addTask(userId, groupId, title, description, dueDate, 0);
-
-        SessionMessages.add(actionRequest, "task-added");
-        // Sem setRenderParameter → vai renderizar a view padrão (view.jsp)
+        try {
+            TaskLocalServiceUtil.addTask(userId, groupId, title, description, dueDate, 0);
+            SessionMessages.add(actionRequest, "task-added");
+            hideDefaultSuccessMessage(actionRequest);
+        } catch (Exception e) {
+            _log.error("Erro ao criar tarefa para usuário " + userId, e);
+            SessionErrors.add(actionRequest, "task-title-required");
+            hideDefaultErrorMessage(actionRequest);
+            actionResponse.setRenderParameter("mvcPath", "/edit_task.jsp");
+        }
     }
+
+    private static final Log _log = LogFactoryUtil.getLog(AddTaskMVCActionCommand.class);
 }

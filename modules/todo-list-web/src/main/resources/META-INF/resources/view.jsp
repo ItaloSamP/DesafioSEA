@@ -1,3 +1,4 @@
+<%@ page pageEncoding="UTF-8" %>
 <%@ include file="/init.jsp" %>
 
 <%@ page import="br.com.seatecnologia.todolist.model.Task" %>
@@ -27,10 +28,10 @@ long completedCount = tasks.stream().filter(t ->  t.getIsCompleted()).count();
     </div>
 
     <%-- Mensagens de feedback das ações --%>
-    <liferay-ui:success key="task-added"   message="Tarefa criada com sucesso!" />
-    <liferay-ui:success key="task-updated" message="Tarefa atualizada com sucesso!" />
-    <liferay-ui:success key="task-deleted" message="Tarefa removida." />
-    <liferay-ui:error   key="task-not-authorized" message="Você não tem permissão para modificar esta tarefa." />
+    <liferay-ui:success key="task-added"   message="task-added" />
+    <liferay-ui:success key="task-updated" message="task-updated" />
+    <liferay-ui:success key="task-deleted" message="task-deleted" />
+    <liferay-ui:error   key="task-not-authorized" message="task-not-authorized" />
 
     <%-- Resumo --%>
     <% if (!tasks.isEmpty()) { %>
@@ -65,8 +66,8 @@ long completedCount = tasks.stream().filter(t ->  t.getIsCompleted()).count();
 
                 <%-- URLs geradas por iteração --%>
                 <portlet:renderURL var="editURL">
-                    <portlet:param name="mvcPath" value="/edit_task.jsp" />
-                    <portlet:param name="taskId"  value="<%= String.valueOf(task.getTaskId()) %>" />
+                    <portlet:param name="mvcRenderCommandName" value="/todolist/edit_task" />
+                    <portlet:param name="taskId" value="<%= String.valueOf(task.getTaskId()) %>" />
                 </portlet:renderURL>
 
                 <portlet:actionURL name="/todolist/toggle_task" var="toggleURL">
