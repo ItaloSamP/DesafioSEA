@@ -3,8 +3,11 @@
 
 <%@ page import="br.com.seatecnologia.todolist.model.Category" %>
 <%@ page import="br.com.seatecnologia.todolist.model.Task" %>
+<%@ page import="com.liferay.document.library.kernel.service.DLAppLocalServiceUtil" %>
+<%@ page import="com.liferay.portal.kernel.repository.model.FileEntry" %>
 <%@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
+<%@ page import="java.net.URLEncoder" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 
@@ -159,16 +162,42 @@ if (currentFilter == null) currentFilter = "all";
 // Aba ativa via parâmetro de render (server-side tabs)
 String activeTab = ParamUtil.getString(renderRequest, "activeTab", "pending");
 
-List<Task> pendingTasks   = new java.util.ArrayList<>();
-List<Task> completedTasks = new java.util.ArrayList<>();
+// Data de hoje (sem hora) para comparar com dueDate
+java.util.Date todayDate = new java.text.SimpleDateFormat("yyyy-MM-dd").parse(
+    new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()));
+
+List<Task> inProgressTasks = new java.util.ArrayList<>();
+List<Task> overdueTasks    = new java.util.ArrayList<>();
+List<Task> completedTasks  = new java.util.ArrayList<>();
 for (Task t : tasks) {
-    if (t.getIsCompleted()) completedTasks.add(t);
-    else pendingTasks.add(t);
+    if (t.getIsCompleted()) {
+        completedTasks.add(t);
+    } else if (t.getDueDate() != null && t.getDueDate().before(todayDate)) {
+        overdueTasks.add(t);
+    } else {
+        inProgressTasks.add(t);
+    }
 }
 
 java.util.Map<Long, String> catNames = new java.util.HashMap<>();
 for (Category cat : categories) {
     catNames.put(cat.getCategoryId(), cat.getName());
+}
+
+// Pré-computa URLs das imagens para evitar queries repetidas no loop
+java.util.Map<Long, String> taskImageURLs = new java.util.HashMap<>();
+for (Task t : tasks) {
+    if (t.getImageId() > 0) {
+        try {
+            FileEntry fe = DLAppLocalServiceUtil.getFileEntry(t.getImageId());
+            String imgURL = "/documents/" + fe.getRepositoryId() + "/" +
+                fe.getFolderId() + "/" +
+                URLEncoder.encode(fe.getFileName(), "UTF-8").replace("+", "%20");
+            taskImageURLs.put(t.getTaskId(), imgURL);
+        } catch (Exception e) {
+            // imagem não encontrada — ignora
+        }
+    }
 }
 %>
 
@@ -194,6 +223,11 @@ for (Category cat : categories) {
 <portlet:renderURL var="pendingTabURL">
     <portlet:param name="filter" value="<%= currentFilter %>" />
     <portlet:param name="activeTab" value="pending" />
+</portlet:renderURL>
+
+<portlet:renderURL var="overdueTabURL">
+    <portlet:param name="filter" value="<%= currentFilter %>" />
+    <portlet:param name="activeTab" value="overdue" />
 </portlet:renderURL>
 
 <portlet:renderURL var="doneTabURL">
@@ -407,8 +441,12 @@ for (Category cat : categories) {
     font-weight: 700;
 }
 .sea-tab-badge-pending {
-    background: #fef3c7;
-    color: #92400e;
+    background: #dbeafe;
+    color: #1e40af;
+}
+.sea-tab-badge-overdue {
+    background: #fee2e2;
+    color: #991b1b;
 }
 .sea-tab-badge-done {
     background: #d1fae5;
@@ -417,6 +455,10 @@ for (Category cat : categories) {
 .sea-tab-badge-inactive {
     background: #f3f4f6;
     color: #6b7280;
+}
+.sea-tab-link.sea-tab-overdue {
+    color: #dc2626 !important;
+    border-bottom-color: #dc2626;
 }
 
 /* Tab content panel */
@@ -553,6 +595,35 @@ for (Category cat : categories) {
     font-size: 0.95rem;
 }
 
+/* Task thumbnail (cover image) */
+.sea-task-thumb {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1.5px solid #e5e7eb;
+    flex-shrink: 0;
+    display: block;
+}
+.sea-task-thumb-empty {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    background: #f3f4f6;
+    border: 1.5px dashed #d1d5db;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #d1d5db;
+    font-size: 1.1rem;
+}
+.sea-title-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
 /* Alert */
 .sea-alert-empty {
     background: #eff6ff;
@@ -646,9 +717,16 @@ for (Category cat : categories) {
         <div class="sea-tabs">
             <a class="sea-tab-link <%= "pending".equals(activeTab) ? "sea-tab-active" : "" %>"
                href="<%= pendingTabURL %>">
-                Pendentes
+                In Progress
                 <span class="sea-tab-badge <%= "pending".equals(activeTab) ? "sea-tab-badge-pending" : "sea-tab-badge-inactive" %>">
-                    <%= pendingTasks.size() %>
+                    <%= inProgressTasks.size() %>
+                </span>
+            </a>
+            <a class="sea-tab-link <%= "overdue".equals(activeTab) ? "sea-tab-active sea-tab-overdue" : "" %>"
+               href="<%= overdueTabURL %>">
+                Pendente
+                <span class="sea-tab-badge <%= "overdue".equals(activeTab) ? "sea-tab-badge-overdue" : (overdueTasks.isEmpty() ? "sea-tab-badge-inactive" : "sea-tab-badge-overdue") %>">
+                    <%= overdueTasks.size() %>
                 </span>
             </a>
             <a class="sea-tab-link <%= "done".equals(activeTab) ? "sea-tab-active" : "" %>"
@@ -664,11 +742,11 @@ for (Category cat : categories) {
 
             <% if ("pending".equals(activeTab)) { %>
 
-                <%-- Aba Pendentes --%>
-                <% if (pendingTasks.isEmpty()) { %>
+                <%-- Aba In Progress --%>
+                <% if (inProgressTasks.isEmpty()) { %>
                     <div class="sea-empty">
-                        <div class="sea-empty-icon">&#10003;</div>
-                        <p class="sea-empty-text">Nenhuma tarefa pendente neste filtro.</p>
+                        <div class="sea-empty-icon">&#9654;</div>
+                        <p class="sea-empty-text">Nenhuma tarefa em andamento neste filtro.</p>
                     </div>
                 <% } else { %>
                     <table class="sea-task-table">
@@ -681,7 +759,7 @@ for (Category cat : categories) {
                             </tr>
                         </thead>
                         <tbody>
-                            <% for (Task task : pendingTasks) { %>
+                            <% for (Task task : inProgressTasks) { %>
 
                             <portlet:renderURL var="editURL">
                                 <portlet:param name="mvcRenderCommandName" value="/todolist/edit_task" />
@@ -702,7 +780,17 @@ for (Category cat : categories) {
                             </portlet:actionURL>
 
                             <tr>
-                                <td><span class="sea-task-title"><%= HtmlUtil.escape(task.getTitle()) %></span></td>
+                                <td>
+                                    <div class="sea-title-cell">
+                                        <% String thumbURL = taskImageURLs.get(task.getTaskId());
+                                           if (thumbURL != null) { %>
+                                            <img src="<%= thumbURL %>" class="sea-task-thumb" alt="" />
+                                        <% } else { %>
+                                            <div class="sea-task-thumb-empty">&#128247;</div>
+                                        <% } %>
+                                        <span class="sea-task-title"><%= HtmlUtil.escape(task.getTitle()) %></span>
+                                    </div>
+                                </td>
                                 <td>
                                     <% String catName = catNames.get(task.getCategoryId());
                                        if (catName != null) { %>
@@ -728,6 +816,94 @@ for (Category cat : categories) {
                                         </form>
                                         <a href="<%= editURL %>" class="sea-action-btn sea-btn-edit">Editar</a>
                                         <form method="post" action="<%= deleteURL %>" style="display:inline;margin:0;"
+                                              onsubmit="return confirm('Remover a tarefa \'<%= HtmlUtil.escapeJS(task.getTitle()) %>\'?')">
+                                            <button type="submit" class="sea-action-btn sea-btn-delete">Deletar</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <% } %>
+                        </tbody>
+                    </table>
+                <% } %>
+
+            <% } else if ("overdue".equals(activeTab)) { %>
+
+                <%-- Aba Pendente (tarefas com prazo estourado) --%>
+                <% if (overdueTasks.isEmpty()) { %>
+                    <div class="sea-empty">
+                        <div class="sea-empty-icon">&#127881;</div>
+                        <p class="sea-empty-text">Nenhuma tarefa com prazo estourado. Arrasou!</p>
+                    </div>
+                <% } else { %>
+                    <table class="sea-task-table">
+                        <thead>
+                            <tr>
+                                <th>T&#237;tulo</th>
+                                <th>Categoria</th>
+                                <th>Prazo (estourado)</th>
+                                <th>A&#231;&#245;es</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (Task task : overdueTasks) { %>
+
+                            <portlet:renderURL var="ovEditURL">
+                                <portlet:param name="mvcRenderCommandName" value="/todolist/edit_task" />
+                                <portlet:param name="taskId" value="<%= String.valueOf(task.getTaskId()) %>" />
+                            </portlet:renderURL>
+
+                            <portlet:renderURL var="ovDetailURL">
+                                <portlet:param name="mvcRenderCommandName" value="/todolist/task_detail" />
+                                <portlet:param name="taskId" value="<%= String.valueOf(task.getTaskId()) %>" />
+                            </portlet:renderURL>
+
+                            <portlet:actionURL name="/todolist/toggle_task" var="ovToggleURL">
+                                <portlet:param name="taskId" value="<%= String.valueOf(task.getTaskId()) %>" />
+                            </portlet:actionURL>
+
+                            <portlet:actionURL name="/todolist/delete_task" var="ovDeleteURL">
+                                <portlet:param name="taskId" value="<%= String.valueOf(task.getTaskId()) %>" />
+                            </portlet:actionURL>
+
+                            <tr style="background:#fff5f5;">
+                                <td>
+                                    <div class="sea-title-cell">
+                                        <% String thumbURLOv = taskImageURLs.get(task.getTaskId());
+                                           if (thumbURLOv != null) { %>
+                                            <img src="<%= thumbURLOv %>" class="sea-task-thumb" alt=""
+                                                 style="border-color:#fecaca;" />
+                                        <% } else { %>
+                                            <div class="sea-task-thumb-empty" style="border-color:#fecaca; color:#fca5a5;">&#9201;</div>
+                                        <% } %>
+                                        <span class="sea-task-title" style="color:#dc2626;"><%= HtmlUtil.escape(task.getTitle()) %></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <% String catNameOv = catNames.get(task.getCategoryId());
+                                       if (catNameOv != null) { %>
+                                        <span class="sea-cat-badge" style="background:#fee2e2; color:#dc2626;">
+                                            <%= HtmlUtil.escape(catNameOv) %>
+                                        </span>
+                                    <% } else { %>
+                                        <span class="text-muted" style="font-size:1.1rem;">&#8212;</span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <span class="sea-date-overdue">
+                                        <fmt:formatDate value="<%= task.getDueDate() %>" pattern="dd/MM/yyyy" />
+                                        &#9888;
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="sea-actions">
+                                        <a href="<%= ovDetailURL %>" class="sea-action-btn sea-btn-detail">Detalhes</a>
+                                        <form method="post" action="<%= ovToggleURL %>" style="display:inline;margin:0;">
+                                            <button type="submit" class="sea-action-btn sea-btn-complete">Concluir</button>
+                                        </form>
+                                        <a href="<%= ovEditURL %>" class="sea-action-btn sea-btn-edit" title="Atualize o prazo para voltar ao In Progress">Editar Prazo</a>
+                                        <form method="post" action="<%= ovDeleteURL %>" style="display:inline;margin:0;"
                                               onsubmit="return confirm('Remover a tarefa \'<%= HtmlUtil.escapeJS(task.getTitle()) %>\'?')">
                                             <button type="submit" class="sea-action-btn sea-btn-delete">Deletar</button>
                                         </form>
@@ -775,7 +951,18 @@ for (Category cat : categories) {
                             </portlet:actionURL>
 
                             <tr class="sea-row-done">
-                                <td><span class="sea-task-title-done"><%= HtmlUtil.escape(task.getTitle()) %></span></td>
+                                <td>
+                                    <div class="sea-title-cell">
+                                        <% String thumbURL2 = taskImageURLs.get(task.getTaskId());
+                                           if (thumbURL2 != null) { %>
+                                            <img src="<%= thumbURL2 %>" class="sea-task-thumb" alt=""
+                                                 style="opacity:0.6;" />
+                                        <% } else { %>
+                                            <div class="sea-task-thumb-empty" style="opacity:0.5;">&#128247;</div>
+                                        <% } %>
+                                        <span class="sea-task-title-done"><%= HtmlUtil.escape(task.getTitle()) %></span>
+                                    </div>
+                                </td>
                                 <td>
                                     <% String catName2 = catNames.get(task.getCategoryId());
                                        if (catName2 != null) { %>
