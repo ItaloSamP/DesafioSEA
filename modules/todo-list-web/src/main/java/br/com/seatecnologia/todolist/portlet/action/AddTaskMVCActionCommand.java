@@ -61,7 +61,7 @@ public class AddTaskMVCActionCommand extends BaseMVCActionCommand {
         if (Validator.isNull(title)) {
             SessionErrors.add(actionRequest, "task-title-required");
             hideDefaultErrorMessage(actionRequest);
-            actionResponse.setRenderParameter("mvcPath", "/edit_task.jsp");
+            actionResponse.setRenderParameter("mvcRenderCommandName", "/todolist/create_task");
             return;
         }
 
@@ -73,7 +73,17 @@ public class AddTaskMVCActionCommand extends BaseMVCActionCommand {
             } catch (Exception e) {
                 SessionErrors.add(actionRequest, "task-duedate-invalid");
                 hideDefaultErrorMessage(actionRequest);
-                actionResponse.setRenderParameter("mvcPath", "/edit_task.jsp");
+                actionResponse.setRenderParameter("mvcRenderCommandName", "/todolist/create_task");
+                return;
+            }
+
+            // Não permite data no passado
+            Date today = new SimpleDateFormat("yyyy-MM-dd").parse(
+                new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            if (dueDate.before(today)) {
+                SessionErrors.add(actionRequest, "task-duedate-past");
+                hideDefaultErrorMessage(actionRequest);
+                actionResponse.setRenderParameter("mvcRenderCommandName", "/todolist/create_task");
                 return;
             }
         }
@@ -88,7 +98,7 @@ public class AddTaskMVCActionCommand extends BaseMVCActionCommand {
             _log.error("Erro ao criar tarefa para usuário " + userId, e);
             SessionErrors.add(actionRequest, "task-title-required");
             hideDefaultErrorMessage(actionRequest);
-            actionResponse.setRenderParameter("mvcPath", "/edit_task.jsp");
+            actionResponse.setRenderParameter("mvcRenderCommandName", "/todolist/create_task");
         }
     }
 

@@ -2,25 +2,34 @@ name: CI Todo-List
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "dev"]
   pull_request:
-    branches: ["main"]
+    branches: ["main", "dev"]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: "17"
           distribution: "temurin"
+          cache: "gradle"
 
-      - name: Build with Gradle
+      - name: Build
         run: |
-          if [ -f gradlew ]; then
-            chmod +x gradlew
-            ./gradlew build
-          fi
+          chmod +x gradlew
+          ./gradlew build -x test
+
+      - name: Test
+        run: ./gradlew :modules:todo-list-service:test
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: modules/todo-list-service/build/reports/tests/

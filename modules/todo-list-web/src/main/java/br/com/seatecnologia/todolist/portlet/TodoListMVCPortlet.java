@@ -54,9 +54,12 @@ public class TodoListMVCPortlet extends MVCPortlet {
             ThemeDisplay themeDisplay =
                 (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-            // Usuário não autenticado: renderiza apenas a tela de login
+            // Usuário não autenticado: força view.jsp diretamente, ignorando qualquer
+            // mvcPath que possa estar preservado no estado do portlet. Usar super.doView()
+            // aqui seria perigoso porque ele lê o mvcPath dos render parameters e poderia
+            // tentar renderizar task_detail.jsp (que não suporta response.sendRedirect).
             if (!themeDisplay.isSignedIn()) {
-                super.doView(renderRequest, renderResponse);
+                include("/view.jsp", renderRequest, renderResponse);
                 return;
             }
 
@@ -66,7 +69,7 @@ public class TodoListMVCPortlet extends MVCPortlet {
             renderRequest.setAttribute("userId", userId);
             renderRequest.setAttribute("userName", themeDisplay.getUser().getFullName());
 
-            // Carrega categorias do usuário (usada na view.jsp e no edit_task.jsp)
+            // Carrega categorias do usuário (usada na view.jsp, edit_task.jsp e task_detail.jsp)
             List<Category> categories =
                 CategoryLocalServiceUtil.getCategoriesByUserId(groupId, userId);
             renderRequest.setAttribute("categories", categories);

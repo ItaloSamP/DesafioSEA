@@ -151,6 +151,16 @@ public class TaskWrapper
 	}
 
 	/**
+	 * Returns the category ID of this task.
+	 *
+	 * @return the category ID of this task
+	 */
+	@Override
+	public long getCategoryId() {
+		return model.getCategoryId();
+	}
+
+	/**
 	 * Returns the company ID of this task.
 	 *
 	 * @return the company ID of this task
@@ -336,6 +346,16 @@ public class TaskWrapper
 	}
 
 	/**
+	 * Sets the category ID of this task.
+	 *
+	 * @param categoryId the category ID of this task
+	 */
+	@Override
+	public void setCategoryId(long categoryId) {
+		model.setCategoryId(categoryId);
+	}
+
+	/**
 	 * Sets the company ID of this task.
 	 *
 	 * @param companyId the company ID of this task
@@ -393,26 +413,6 @@ public class TaskWrapper
 	@Override
 	public void setImageId(long imageId) {
 		model.setImageId(imageId);
-	}
-
-	/**
-	 * Returns the category ID of this task.
-	 *
-	 * @return the category ID of this task
-	 */
-	@Override
-	public long getCategoryId() {
-		return model.getCategoryId();
-	}
-
-	/**
-	 * Sets the category ID of this task.
-	 *
-	 * @param categoryId the category ID of this task
-	 */
-	@Override
-	public void setCategoryId(long categoryId) {
-		model.setCategoryId(categoryId);
 	}
 
 	/**

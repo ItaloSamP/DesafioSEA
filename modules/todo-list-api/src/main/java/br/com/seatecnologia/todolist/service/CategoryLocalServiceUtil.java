@@ -38,15 +38,6 @@ public class CategoryLocalServiceUtil {
 	 */
 
 	/**
-	 * Cria uma nova categoria para o usuário no grupo.
-	 */
-	public static Category addCategory(long userId, long groupId, String name)
-		throws PortalException {
-
-		return getService().addCategory(userId, groupId, name);
-	}
-
-	/**
 	 * Adds the category to the database. Also notifies the appropriate model listeners.
 	 *
 	 * <p>
@@ -58,6 +49,15 @@ public class CategoryLocalServiceUtil {
 	 */
 	public static Category addCategory(Category category) {
 		return getService().addCategory(category);
+	}
+
+	/**
+	 * Cria uma nova categoria para o usuário no grupo.
+	 */
+	public static Category addCategory(long userId, long groupId, String name)
+		throws PortalException {
+
+		return getService().addCategory(userId, groupId, name);
 	}
 
 	/**
@@ -245,6 +245,15 @@ public class CategoryLocalServiceUtil {
 	}
 
 	/**
+	 * Busca todas as categorias do usuário no grupo.
+	 */
+	public static List<Category> getCategoriesByUserId(
+		long groupId, long userId) {
+
+		return getService().getCategoriesByUserId(groupId, userId);
+	}
+
+	/**
 	 * Returns all the categories matching the UUID and company.
 	 *
 	 * @param uuid the UUID of the categories
@@ -344,24 +353,6 @@ public class CategoryLocalServiceUtil {
 	}
 
 	/**
-	 * Busca todas as categorias do usuário no grupo.
-	 */
-	public static java.util.List<Category> getCategoriesByUserId(
-		long groupId, long userId) {
-
-		return getService().getCategoriesByUserId(groupId, userId);
-	}
-
-	/**
-	 * Renomeia uma categoria existente.
-	 */
-	public static Category updateCategory(long categoryId, String name)
-		throws PortalException {
-
-		return getService().updateCategory(categoryId, name);
-	}
-
-	/**
 	 * Updates the category in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * <p>
@@ -373,6 +364,15 @@ public class CategoryLocalServiceUtil {
 	 */
 	public static Category updateCategory(Category category) {
 		return getService().updateCategory(category);
+	}
+
+	/**
+	 * Renomeia uma categoria existente.
+	 */
+	public static Category updateCategory(long categoryId, String name)
+		throws PortalException {
+
+		return getService().updateCategory(categoryId, name);
 	}
 
 	public static CategoryLocalService getService() {

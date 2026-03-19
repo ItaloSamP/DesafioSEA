@@ -44,6 +44,19 @@ public class CommentLocalServiceWrapper
 	}
 
 	/**
+	 * Adiciona um comentário a uma tarefa.
+	 * Segue o mesmo padrão do TaskLocalServiceImpl: gera ID, busca o User
+	 * para pegar companyId e userName, seta todos os campos e persiste.
+	 */
+	@Override
+	public br.com.seatecnologia.todolist.model.Comment addComment(
+			long userId, long groupId, long taskId, String text)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _commentLocalService.addComment(userId, groupId, taskId, text);
+	}
+
+	/**
 	 * Creates a new comment with the primary key. Does not add the comment to the database.
 	 *
 	 * @param commentId the primary key for the new comment
@@ -293,6 +306,17 @@ public class CommentLocalServiceWrapper
 	}
 
 	/**
+	 * Retorna todos os comentários de uma tarefa, ordenados por data de criação
+	 * (a ordenação é definida no finder do service.xml via order-by-col).
+	 */
+	@Override
+	public java.util.List<br.com.seatecnologia.todolist.model.Comment>
+		getCommentsByTaskId(long taskId) {
+
+		return _commentLocalService.getCommentsByTaskId(taskId);
+	}
+
+	/**
 	 * Returns all the comments matching the UUID and company.
 	 *
 	 * @param uuid the UUID of the comments
@@ -392,6 +416,18 @@ public class CommentLocalServiceWrapper
 		br.com.seatecnologia.todolist.model.Comment comment) {
 
 		return _commentLocalService.updateComment(comment);
+	}
+
+	/**
+	 * Atualiza o texto de um comentário existente.
+	 * O ownership check é feito no ActionCommand, não aqui.
+	 */
+	@Override
+	public br.com.seatecnologia.todolist.model.Comment updateComment(
+			long commentId, String text)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _commentLocalService.updateComment(commentId, text);
 	}
 
 	@Override

@@ -23,6 +23,7 @@ String dueDateValue = "";
 if (isEdit && task.getDueDate() != null) {
     dueDateValue = new java.text.SimpleDateFormat("yyyy-MM-dd").format(task.getDueDate());
 }
+String todayValue = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
 
 // Categorias disponíveis para o select
 @SuppressWarnings("unchecked")
@@ -42,6 +43,7 @@ String actionCommand = isEdit ? "/todolist/edit_task" : "/todolist/add_task";
 
     <liferay-ui:error key="task-title-required"   message="task-title-required" />
     <liferay-ui:error key="task-duedate-invalid"  message="task-duedate-invalid" />
+    <liferay-ui:error key="task-duedate-past"     message="task-duedate-past" />
     <liferay-ui:error key="task-not-authorized"   message="task-not-authorized" />
 
     <form action="<%= submitURL %>" method="post">
@@ -80,6 +82,7 @@ String actionCommand = isEdit ? "/todolist/edit_task" : "/todolist/add_task";
                 name="<portlet:namespace />dueDate"
                 class="form-control"
                 value="<%= dueDateValue %>"
+                min="<%= todayValue %>"
             />
         </div>
 

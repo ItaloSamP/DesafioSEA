@@ -80,9 +80,24 @@ public class EditTaskMVCActionCommand extends BaseMVCActionCommand {
                 dueDate = new SimpleDateFormat("yyyy-MM-dd").parse(dueDateStr);
             } catch (Exception e) {
                 SessionErrors.add(actionRequest, "task-duedate-invalid");
-                actionResponse.setRenderParameter("mvcPath", "/edit_task.jsp");
+                actionResponse.setRenderParameter("mvcRenderCommandName", "/todolist/edit_task");
                 actionResponse.setRenderParameter("taskId", String.valueOf(taskId));
                 return;
+            }
+
+            // Não permite data no passado
+            try {
+                Date today = new SimpleDateFormat("yyyy-MM-dd").parse(
+                    new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                if (dueDate.before(today)) {
+                    SessionErrors.add(actionRequest, "task-duedate-past");
+                    hideDefaultErrorMessage(actionRequest);
+                    actionResponse.setRenderParameter("mvcRenderCommandName", "/todolist/edit_task");
+                    actionResponse.setRenderParameter("taskId", String.valueOf(taskId));
+                    return;
+                }
+            } catch (Exception e) {
+                // não deve ocorrer — formato fixo
             }
         }
 

@@ -48,5 +48,6 @@
 		<field name="isDeleted" type="boolean" />
 		<field name="dueDate" type="Date" />
 		<field name="imageId" type="long" />
+		<field name="categoryId" type="long" />
 	</model>
 </model-hints>

@@ -52,6 +52,18 @@ public class CommentLocalServiceUtil {
 	}
 
 	/**
+	 * Adiciona um comentário a uma tarefa.
+	 * Segue o mesmo padrão do TaskLocalServiceImpl: gera ID, busca o User
+	 * para pegar companyId e userName, seta todos os campos e persiste.
+	 */
+	public static Comment addComment(
+			long userId, long groupId, long taskId, String text)
+		throws PortalException {
+
+		return getService().addComment(userId, groupId, taskId, text);
+	}
+
+	/**
 	 * Creates a new comment with the primary key. Does not add the comment to the database.
 	 *
 	 * @param commentId the primary key for the new comment
@@ -259,6 +271,14 @@ public class CommentLocalServiceUtil {
 	}
 
 	/**
+	 * Retorna todos os comentários de uma tarefa, ordenados por data de criação
+	 * (a ordenação é definida no finder do service.xml via order-by-col).
+	 */
+	public static List<Comment> getCommentsByTaskId(long taskId) {
+		return getService().getCommentsByTaskId(taskId);
+	}
+
+	/**
 	 * Returns all the comments matching the UUID and company.
 	 *
 	 * @param uuid the UUID of the comments
@@ -343,6 +363,16 @@ public class CommentLocalServiceUtil {
 	 */
 	public static Comment updateComment(Comment comment) {
 		return getService().updateComment(comment);
+	}
+
+	/**
+	 * Atualiza o texto de um comentário existente.
+	 * O ownership check é feito no ActionCommand, não aqui.
+	 */
+	public static Comment updateComment(long commentId, String text)
+		throws PortalException {
+
+		return getService().updateComment(commentId, text);
 	}
 
 	public static CommentLocalService getService() {

@@ -38,7 +38,7 @@ public class TaskLocalServiceUtil {
 	 */
 
 	/**
-	 * Método para criar uma nova tarefa.
+	 * Cria uma nova tarefa sem categoria (compatibilidade retroativa).
 	 */
 	public static Task addTask(
 			long userId, long groupId, String title, String description,
@@ -50,7 +50,7 @@ public class TaskLocalServiceUtil {
 	}
 
 	/**
-	 * Método para criar uma nova tarefa vinculada a uma categoria.
+	 * Cria uma nova tarefa vinculada a uma categoria.
 	 */
 	public static Task addTask(
 			long userId, long groupId, String title, String description,
@@ -386,7 +386,7 @@ public class TaskLocalServiceUtil {
 	}
 
 	/**
-	 * Método para atualizar os dados de uma tarefa existente;
+	 * Atualiza os dados de uma tarefa (compatibilidade retroativa, sem categoria).
 	 */
 	public static Task updateTask(
 			long taskId, String title, String description,
@@ -398,7 +398,7 @@ public class TaskLocalServiceUtil {
 	}
 
 	/**
-	 * Método para atualizar os dados de uma tarefa existente, incluindo categoria.
+	 * Atualiza os dados de uma tarefa, incluindo a categoria.
 	 */
 	public static Task updateTask(
 			long taskId, String title, String description,

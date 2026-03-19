@@ -27,7 +27,7 @@ public class TaskLocalServiceWrapper
 	}
 
 	/**
-	 * Método para criar uma nova tarefa.
+	 * Cria uma nova tarefa sem categoria (compatibilidade retroativa).
 	 */
 	@Override
 	public br.com.seatecnologia.todolist.model.Task addTask(
@@ -40,7 +40,7 @@ public class TaskLocalServiceWrapper
 	}
 
 	/**
-	 * Método para criar uma nova tarefa vinculada a uma categoria.
+	 * Cria uma nova tarefa vinculada a uma categoria.
 	 */
 	@Override
 	public br.com.seatecnologia.todolist.model.Task addTask(
@@ -439,7 +439,7 @@ public class TaskLocalServiceWrapper
 	}
 
 	/**
-	 * Método para atualizar os dados de uma tarefa existente;
+	 * Atualiza os dados de uma tarefa (compatibilidade retroativa, sem categoria).
 	 */
 	@Override
 	public br.com.seatecnologia.todolist.model.Task updateTask(
@@ -452,7 +452,7 @@ public class TaskLocalServiceWrapper
 	}
 
 	/**
-	 * Método para atualizar os dados de uma tarefa existente, incluindo categoria.
+	 * Atualiza os dados de uma tarefa, incluindo a categoria.
 	 */
 	@Override
 	public br.com.seatecnologia.todolist.model.Task updateTask(

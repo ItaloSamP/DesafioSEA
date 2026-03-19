@@ -62,7 +62,7 @@ public interface TaskLocalService
 	 */
 
 	/**
-	 * Método para criar uma nova tarefa.
+	 * Cria uma nova tarefa sem categoria (compatibilidade retroativa).
 	 */
 	public Task addTask(
 			long userId, long groupId, String title, String description,
@@ -70,7 +70,7 @@ public interface TaskLocalService
 		throws PortalException;
 
 	/**
-	 * Método para criar uma nova tarefa vinculada a uma categoria.
+	 * Cria uma nova tarefa vinculada a uma categoria.
 	 */
 	public Task addTask(
 			long userId, long groupId, String title, String description,
@@ -343,7 +343,7 @@ public interface TaskLocalService
 	public Task toggleTaskStatus(long taskId) throws PortalException;
 
 	/**
-	 * Método para atualizar os dados de uma tarefa existente;
+	 * Atualiza os dados de uma tarefa (compatibilidade retroativa, sem categoria).
 	 */
 	public Task updateTask(
 			long taskId, String title, String description, Date dueDate,
@@ -351,7 +351,7 @@ public interface TaskLocalService
 		throws PortalException;
 
 	/**
-	 * Método para atualizar os dados de uma tarefa existente, incluindo categoria.
+	 * Atualiza os dados de uma tarefa, incluindo a categoria.
 	 */
 	public Task updateTask(
 			long taskId, String title, String description, Date dueDate,

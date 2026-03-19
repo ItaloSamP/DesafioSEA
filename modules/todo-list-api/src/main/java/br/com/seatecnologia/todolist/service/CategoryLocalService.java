@@ -61,12 +61,6 @@ public interface CategoryLocalService
 	 */
 
 	/**
-	 * Cria uma nova categoria para o usuário no grupo.
-	 */
-	public Category addCategory(long userId, long groupId, String name)
-		throws PortalException;
-
-	/**
 	 * Adds the category to the database. Also notifies the appropriate model listeners.
 	 *
 	 * <p>
@@ -78,6 +72,12 @@ public interface CategoryLocalService
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	public Category addCategory(Category category);
+
+	/**
+	 * Cria uma nova categoria para o usuário no grupo.
+	 */
+	public Category addCategory(long userId, long groupId, String name)
+		throws PortalException;
 
 	/**
 	 * Creates a new category with the primary key. Does not add the category to the database.
@@ -231,6 +231,12 @@ public interface CategoryLocalService
 	public List<Category> getCategories(int start, int end);
 
 	/**
+	 * Busca todas as categorias do usuário no grupo.
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Category> getCategoriesByUserId(long groupId, long userId);
+
+	/**
 	 * Returns all the categories matching the UUID and company.
 	 *
 	 * @param uuid the UUID of the categories
@@ -309,18 +315,6 @@ public interface CategoryLocalService
 		throws PortalException;
 
 	/**
-	 * Busca todas as categorias do usuário no grupo.
-	 */
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<Category> getCategoriesByUserId(long groupId, long userId);
-
-	/**
-	 * Renomeia uma categoria existente.
-	 */
-	public Category updateCategory(long categoryId, String name)
-		throws PortalException;
-
-	/**
 	 * Updates the category in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * <p>
@@ -332,5 +326,11 @@ public interface CategoryLocalService
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	public Category updateCategory(Category category);
+
+	/**
+	 * Renomeia uma categoria existente.
+	 */
+	public Category updateCategory(long categoryId, String name)
+		throws PortalException;
 
 }

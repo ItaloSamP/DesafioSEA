@@ -71,7 +71,7 @@ for (Category cat : categories) {
 %>
 
 <portlet:renderURL var="addTaskURL">
-    <portlet:param name="mvcPath" value="/edit_task.jsp" />
+    <portlet:param name="mvcRenderCommandName" value="/todolist/create_task" />
 </portlet:renderURL>
 
 <portlet:renderURL var="categoriesURL">
@@ -222,6 +222,11 @@ for (Category cat : categories) {
                                 <portlet:param name="taskId" value="<%= String.valueOf(task.getTaskId()) %>" />
                             </portlet:renderURL>
 
+                            <portlet:renderURL var="detailURL">
+                                <portlet:param name="mvcRenderCommandName" value="/todolist/task_detail" />
+                                <portlet:param name="taskId" value="<%= String.valueOf(task.getTaskId()) %>" />
+                            </portlet:renderURL>
+
                             <portlet:actionURL name="/todolist/toggle_task" var="toggleURL">
                                 <portlet:param name="taskId" value="<%= String.valueOf(task.getTaskId()) %>" />
                             </portlet:actionURL>
@@ -248,6 +253,7 @@ for (Category cat : categories) {
                                     <% } %>
                                 </td>
                                 <td>
+                                    <a href="<%= detailURL %>" class="btn btn-sm btn-outline-info">Detalhes</a>
                                     <form method="post" action="<%= toggleURL %>" style="display:inline">
                                         <button type="submit" class="btn btn-sm btn-outline-success">Concluir</button>
                                     </form>
@@ -282,6 +288,11 @@ for (Category cat : categories) {
                         <tbody>
                             <% for (Task task : completedTasks) { %>
 
+                            <portlet:renderURL var="doneDetailURL">
+                                <portlet:param name="mvcRenderCommandName" value="/todolist/task_detail" />
+                                <portlet:param name="taskId" value="<%= String.valueOf(task.getTaskId()) %>" />
+                            </portlet:renderURL>
+
                             <portlet:actionURL name="/todolist/toggle_task" var="doneToggleURL">
                                 <portlet:param name="taskId" value="<%= String.valueOf(task.getTaskId()) %>" />
                             </portlet:actionURL>
@@ -308,6 +319,7 @@ for (Category cat : categories) {
                                     <% } %>
                                 </td>
                                 <td>
+                                    <a href="<%= doneDetailURL %>" class="btn btn-sm btn-outline-info">Detalhes</a>
                                     <form method="post" action="<%= doneToggleURL %>" style="display:inline">
                                         <button type="submit" class="btn btn-sm btn-outline-warning">Reabrir</button>
                                     </form>

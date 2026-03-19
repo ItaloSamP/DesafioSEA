@@ -3,9 +3,12 @@ targetCompatibility = "1.8"
 
 dependencies {
 	compileOnly group: "com.liferay.portal", name: "release.portal.api", version: "7.4.3.112-ga112"
-	
+
 	// Atualizamos o caminho aqui tirando a pasta extra:
 	compileOnly project(":modules:todo-list-api")
+
+	testImplementation group: "junit", name: "junit", version: "4.13.2"
+	testImplementation group: "org.mockito", name: "mockito-core", version: "4.11.0"
 }
 
 buildService {

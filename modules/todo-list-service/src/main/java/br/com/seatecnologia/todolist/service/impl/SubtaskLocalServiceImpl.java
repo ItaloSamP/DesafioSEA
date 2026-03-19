@@ -46,11 +46,20 @@ public class SubtaskLocalServiceImpl extends SubtaskLocalServiceBaseImpl {
      */
     public Subtask toggleSubtaskStatus(long subtaskId) throws PortalException {
         Subtask subtask = subtaskPersistence.findByPrimaryKey(subtaskId);
-        
+
         subtask.setIsCompleted(!subtask.getIsCompleted());
         subtask.setModifiedDate(new Date());
 
         return subtaskPersistence.update(subtask);
+    }
+
+    /**
+     * Remove uma subtarefa pelo ID e retorna o objeto removido.
+     * O ownership check (verificar se o usuário é dono da task pai) é feito
+     * no ActionCommand antes de chamar este método.
+     */
+    public Subtask deleteSubtask(long subtaskId) throws PortalException {
+        return subtaskPersistence.remove(subtaskId);
     }
 
 }
