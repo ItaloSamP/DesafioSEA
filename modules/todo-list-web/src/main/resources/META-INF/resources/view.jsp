@@ -568,7 +568,7 @@ for (Category cat : categories) {
 
     <%-- Cabeçalho --%>
     <div class="sea-header">
-        <h2 class="sea-header-title">Minhas <span>Tarefas</span></h2>
+        <h2 class="sea-header-title"><span>TodoList</span></h2>
         <div class="sea-header-actions">
             <a href="<%= categoriesURL %>" class="sea-btn-categories">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>

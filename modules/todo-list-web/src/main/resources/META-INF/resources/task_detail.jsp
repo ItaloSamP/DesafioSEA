@@ -5,7 +5,10 @@
 <%@ page import="br.com.seatecnologia.todolist.model.Comment" %>
 <%@ page import="br.com.seatecnologia.todolist.model.Subtask" %>
 <%@ page import="br.com.seatecnologia.todolist.model.Task" %>
+<%@ page import="com.liferay.document.library.kernel.service.DLAppLocalServiceUtil" %>
+<%@ page import="com.liferay.portal.kernel.repository.model.FileEntry" %>
 <%@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
+<%@ page import="java.net.URLEncoder" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.List" %>
@@ -148,6 +151,24 @@ long completedSubtasks = completedCount;
                     Prazo: <strong><fmt:formatDate value="<%= task.getDueDate() %>" pattern="dd/MM/yyyy" /></strong>
                 </small>
             <% } %>
+            <%-- Task image --%>
+            <% if (task.getImageId() > 0) {
+                try {
+                    FileEntry imgEntry = DLAppLocalServiceUtil.getFileEntry(task.getImageId());
+                    String imgURL = "/documents/" + imgEntry.getRepositoryId() + "/" +
+                        imgEntry.getFolderId() + "/" +
+                        URLEncoder.encode(imgEntry.getFileName(), "UTF-8").replace("+", "%20");
+            %>
+                <div class="mt-3">
+                    <img src="<%= imgURL %>"
+                         alt="Imagem da tarefa"
+                         style="max-width:100%; max-height:320px; border-radius:10px; border:1.5px solid #e5e7eb; display:block;" />
+                </div>
+            <%
+                } catch (Exception e) {
+                    // image file entry not found — skip silently
+                }
+            } %>
         </div>
     </div>
 
