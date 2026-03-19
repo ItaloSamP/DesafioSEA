@@ -8,7 +8,12 @@ dependencies {
 	compileOnly project(":modules:todo-list-api")
 
 	testImplementation group: "junit", name: "junit", version: "4.13.2"
-	testImplementation group: "org.mockito", name: "mockito-core", version: "4.11.0"
+	testImplementation group: "org.mockito", name: "mockito-core",   version: "4.11.0"
+	testImplementation group: "org.mockito", name: "mockito-inline", version: "4.11.0"
+
+	// As dependências compileOnly não ficam no classpath de teste, então precisamos repeti-las:
+	testImplementation group: "com.liferay.portal", name: "release.portal.api", version: "7.4.3.112-ga112"
+	testImplementation project(":modules:todo-list-api")
 }
 
 buildService {
