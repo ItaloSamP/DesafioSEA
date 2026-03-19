@@ -13,23 +13,125 @@
 if (!themeDisplay.isSignedIn()) {
 %>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm text-center p-5">
-                <div style="font-size:3rem;">&#128274;</div>
-                <h3 class="mt-3 mb-2">Acesso restrito</h3>
-                <p class="text-muted mb-4">
-                    Fa&#231;a login para acessar sua lista de tarefas.
-                </p>
-                <a href="<%= themeDisplay.getURLSignIn() %>" class="btn btn-primary btn-lg mb-3">
-                    Entrar
-                </a>
-                <a href="/c/portal/register" class="btn btn-outline-secondary">
-                    Criar conta
-                </a>
-            </div>
+<style>
+.sea-login-wrapper {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+.sea-login-card {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+    padding: 3rem 2.5rem;
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+.sea-login-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #4f46e5, #7c3aed, #ec4899);
+}
+.sea-login-icon-wrap {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ede9fe, #fce7f3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+.sea-login-icon-wrap svg {
+    width: 36px;
+    height: 36px;
+    color: #7c3aed;
+}
+.sea-login-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1e1b4b;
+    margin-bottom: 0.5rem;
+}
+.sea-login-subtitle {
+    color: #6b7280;
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+.sea-btn-primary {
+    display: block;
+    width: 100%;
+    padding: 0.85rem;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white !important;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 0.75rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(79,70,229,0.35);
+}
+.sea-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(79,70,229,0.45);
+    color: white !important;
+    text-decoration: none;
+}
+.sea-btn-secondary {
+    display: block;
+    width: 100%;
+    padding: 0.85rem;
+    background: transparent;
+    color: #4f46e5 !important;
+    border: 2px solid #e0e7ff;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.sea-btn-secondary:hover {
+    background: #f5f3ff;
+    border-color: #a5b4fc;
+    text-decoration: none;
+    color: #4f46e5 !important;
+}
+.sea-divider {
+    color: #9ca3af;
+    font-size: 0.8rem;
+    margin: 0.75rem 0;
+}
+</style>
+
+<div class="sea-login-wrapper">
+    <div class="sea-login-card">
+        <div class="sea-login-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
         </div>
+        <div class="sea-login-title">Acesso restrito</div>
+        <p class="sea-login-subtitle">
+            Fa&#231;a login para organizar suas tarefas e aumentar sua produtividade.
+        </p>
+        <a href="<%= themeDisplay.getURLSignIn() %>" class="sea-btn-primary">
+            Entrar na conta
+        </a>
+        <div class="sea-divider">ou</div>
+        <a href="/c/portal/register" class="sea-btn-secondary">
+            Criar conta gratuita
+        </a>
     </div>
 </div>
 
@@ -99,16 +201,383 @@ for (Category cat : categories) {
     <portlet:param name="activeTab" value="done" />
 </portlet:renderURL>
 
-<div class="container-fluid mt-3">
+<style>
+/* ===== TODO LIST STYLES ===== */
+.sea-todo-wrapper {
+    padding: 1.5rem 1rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Header */
+.sea-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+.sea-header-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #1e1b4b;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+.sea-header-title span {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.sea-header-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+.sea-btn-categories {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 1rem;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    background: white;
+    color: #374151 !important;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+.sea-btn-categories:hover {
+    border-color: #c4b5fd;
+    background: #f5f3ff;
+    color: #4f46e5 !important;
+    text-decoration: none;
+}
+.sea-btn-new-task {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 1.1rem;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white !important;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 3px 10px rgba(79,70,229,0.3);
+    transition: all 0.2s;
+}
+.sea-btn-new-task:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(79,70,229,0.4);
+    color: white !important;
+    text-decoration: none;
+}
+
+/* Filter pills */
+.sea-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+}
+.sea-filter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: 1.5px solid transparent;
+}
+.sea-filter-pill:hover {
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+.sea-filter-pill.active-all {
+    background: #1e1b4b;
+    color: white !important;
+}
+.sea-filter-pill.inactive-all {
+    background: #f3f4f6;
+    color: #374151 !important;
+    border-color: #e5e7eb;
+}
+.sea-filter-pill.inactive-all:hover {
+    background: #e5e7eb;
+}
+.sea-filter-pill.active-nocat {
+    background: #6b7280;
+    color: white !important;
+}
+.sea-filter-pill.inactive-nocat {
+    background: #f9fafb;
+    color: #6b7280 !important;
+    border-color: #d1d5db;
+}
+.sea-filter-pill.active-cat {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+}
+.sea-filter-pill.inactive-cat {
+    background: #ede9fe;
+    color: #4f46e5 !important;
+    border-color: #c4b5fd;
+}
+.sea-filter-pill.inactive-cat:hover {
+    background: #ddd6fe;
+}
+.sea-pill-count {
+    background: rgba(255,255,255,0.3);
+    padding: 0 5px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+.sea-pill-count-dark {
+    background: rgba(0,0,0,0.1);
+    padding: 0 5px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+
+/* Counters */
+.sea-counters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.25rem;
+}
+.sea-counter-chip {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0.25rem 0.7rem;
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+.sea-counter-chip strong {
+    color: #1e1b4b;
+}
+
+/* Tabs */
+.sea-tabs {
+    display: flex;
+    border-bottom: 2px solid #e5e7eb;
+    margin-bottom: 0;
+    gap: 0;
+}
+.sea-tab-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: #6b7280 !important;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+}
+.sea-tab-link:hover {
+    color: #4f46e5 !important;
+    text-decoration: none;
+}
+.sea-tab-link.sea-tab-active {
+    color: #4f46e5 !important;
+    border-bottom-color: #4f46e5;
+}
+.sea-tab-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+.sea-tab-badge-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+.sea-tab-badge-done {
+    background: #d1fae5;
+    color: #065f46;
+}
+.sea-tab-badge-inactive {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+/* Tab content panel */
+.sea-tab-panel {
+    background: #ffffff;
+    border: 1.5px solid #e5e7eb;
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    overflow: hidden;
+}
+
+/* Task table */
+.sea-task-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.sea-task-table thead tr {
+    background: #f8f9ff;
+    border-bottom: 1.5px solid #e5e7eb;
+}
+.sea-task-table th {
+    padding: 0.75rem 1rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6b7280;
+    white-space: nowrap;
+}
+.sea-task-table td {
+    padding: 0.85rem 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f3f4f6;
+}
+.sea-task-table tbody tr:last-child td {
+    border-bottom: none;
+}
+.sea-task-table tbody tr:hover {
+    background: #fafbff;
+}
+.sea-task-table tbody tr.sea-row-done {
+    background: #f0fdf4;
+}
+.sea-task-table tbody tr.sea-row-done:hover {
+    background: #dcfce7;
+}
+.sea-task-title {
+    font-weight: 600;
+    color: #111827;
+    font-size: 0.92rem;
+}
+.sea-task-title-done {
+    font-weight: 600;
+    color: #6b7280;
+    font-size: 0.92rem;
+    text-decoration: line-through;
+}
+.sea-cat-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+    color: #4f46e5;
+}
+.sea-cat-badge-done {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: #d1fae5;
+    color: #065f46;
+}
+.sea-date {
+    font-size: 0.85rem;
+    color: #374151;
+    white-space: nowrap;
+}
+.sea-date-overdue {
+    font-size: 0.85rem;
+    color: #dc2626;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Action buttons */
+.sea-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    align-items: center;
+}
+.sea-action-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.65rem;
+    border-radius: 7px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    line-height: 1.4;
+    white-space: nowrap;
+    background: none;
+}
+.sea-action-btn:hover { text-decoration: none; transform: translateY(-1px); }
+.sea-btn-detail { background: #eff6ff; color: #1d4ed8 !important; border-color: #bfdbfe; }
+.sea-btn-detail:hover { background: #dbeafe; }
+.sea-btn-complete { background: #f0fdf4; color: #16a34a !important; border-color: #bbf7d0; }
+.sea-btn-complete:hover { background: #dcfce7; }
+.sea-btn-reopen { background: #fffbeb; color: #d97706 !important; border-color: #fde68a; }
+.sea-btn-reopen:hover { background: #fef3c7; }
+.sea-btn-edit { background: #f8fafc; color: #475569 !important; border-color: #e2e8f0; }
+.sea-btn-edit:hover { background: #f1f5f9; }
+.sea-btn-delete { background: #fff5f5; color: #dc2626 !important; border-color: #fecaca; }
+.sea-btn-delete:hover { background: #fee2e2; }
+
+/* Empty state */
+.sea-empty {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: #9ca3af;
+}
+.sea-empty-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    opacity: 0.5;
+}
+.sea-empty-text {
+    font-size: 0.95rem;
+}
+
+/* Alert */
+.sea-alert-empty {
+    background: #eff6ff;
+    border: 1.5px solid #bfdbfe;
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    color: #1d4ed8;
+    font-size: 0.9rem;
+}
+</style>
+
+<div class="sea-todo-wrapper">
 
     <%-- Cabeçalho --%>
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="mb-0">Minhas Tarefas</h2>
-        <div>
-            <a href="<%= categoriesURL %>" class="btn btn-outline-secondary btn-sm mr-2">
-                &#9776; Categorias
+    <div class="sea-header">
+        <h2 class="sea-header-title">Minhas <span>Tarefas</span></h2>
+        <div class="sea-header-actions">
+            <a href="<%= categoriesURL %>" class="sea-btn-categories">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                Categorias
             </a>
-            <a href="<%= addTaskURL %>" class="btn btn-primary btn-sm">+ Nova Tarefa</a>
+            <a href="<%= addTaskURL %>" class="sea-btn-new-task">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Nova Tarefa
+            </a>
         </div>
     </div>
 
@@ -122,18 +591,16 @@ for (Category cat : categories) {
     <liferay-ui:error   key="task-not-authorized" message="task-not-authorized" />
 
     <%-- Filtros por categoria --%>
-    <div class="mb-2 d-flex flex-wrap" style="gap: 6px;">
+    <div class="sea-filters">
 
         <a href="<%= filterAllURL %>"
-           class="btn btn-sm <%= "all".equals(currentFilter) ? "btn-dark" : "btn-outline-dark" %>">
+           class="sea-filter-pill <%= "all".equals(currentFilter) ? "active-all" : "inactive-all" %>">
             Todas
-            <span style="background:rgba(255,255,255,0.25);padding:1px 6px;border-radius:10px;font-size:11px;margin-left:3px;">
-                <%= tasks.size() %>
-            </span>
+            <span class="<%= "all".equals(currentFilter) ? "sea-pill-count" : "sea-pill-count-dark" %>"><%= tasks.size() %></span>
         </a>
 
         <a href="<%= filterNoCatURL %>"
-           class="btn btn-sm <%= "no-category".equals(currentFilter) ? "btn-secondary" : "btn-outline-secondary" %>">
+           class="sea-filter-pill <%= "no-category".equals(currentFilter) ? "active-nocat" : "inactive-nocat" %>">
             Sem Categoria
         </a>
 
@@ -146,7 +613,7 @@ for (Category cat : categories) {
                 <portlet:param name="activeTab" value="<%= activeTab %>" />
             </portlet:renderURL>
             <a href="<%= filterCatURL %>"
-               class="btn btn-sm <%= isActive ? "btn-info" : "btn-outline-info" %>">
+               class="sea-filter-pill <%= isActive ? "active-cat" : "inactive-cat" %>">
                 <%= HtmlUtil.escape(cat.getName()) %>
             </a>
         <% } %>
@@ -155,9 +622,9 @@ for (Category cat : categories) {
 
     <%-- Contadores por categoria --%>
     <% if (!categoryCounters.isEmpty()) { %>
-        <div class="mb-3 d-flex flex-wrap" style="gap: 6px;">
+        <div class="sea-counters">
             <% for (Map.Entry<String, Long> entry : categoryCounters.entrySet()) { %>
-                <span class="badge badge-light border" style="font-size:12px;padding:4px 10px;">
+                <span class="sea-counter-chip">
                     <%= HtmlUtil.escape(entry.getKey()) %>: <strong><%= entry.getValue() %></strong>
                 </span>
             <% } %>
@@ -166,47 +633,46 @@ for (Category cat : categories) {
 
     <%-- Conteúdo --%>
     <% if (tasks.isEmpty()) { %>
-        <div class="alert alert-info mt-2">
+        <div class="sea-alert-empty">
             <% if ("all".equals(currentFilter)) { %>
-                Nenhuma tarefa ainda. Clique em <strong>"+ Nova Tarefa"</strong> para começar!
+                Nenhuma tarefa ainda. Clique em <strong>"+ Nova Tarefa"</strong> para come&#231;ar!
             <% } else { %>
                 Nenhuma tarefa encontrada para o filtro selecionado.
             <% } %>
         </div>
     <% } else { %>
 
-        <%-- Abas server-side (sem depender de Bootstrap JS) --%>
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link <%= "pending".equals(activeTab) ? "active font-weight-bold" : "" %>"
-                   href="<%= pendingTabURL %>">
-                    Pendentes
-                    <span class="badge <%= "pending".equals(activeTab) ? "badge-warning" : "badge-secondary" %> ml-1">
-                        <%= pendingTasks.size() %>
-                    </span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <%= "done".equals(activeTab) ? "active font-weight-bold" : "" %>"
-                   href="<%= doneTabURL %>">
-                    Conclu&#237;das
-                    <span class="badge <%= "done".equals(activeTab) ? "badge-success" : "badge-secondary" %> ml-1">
-                        <%= completedTasks.size() %>
-                    </span>
-                </a>
-            </li>
-        </ul>
+        <%-- Abas server-side --%>
+        <div class="sea-tabs">
+            <a class="sea-tab-link <%= "pending".equals(activeTab) ? "sea-tab-active" : "" %>"
+               href="<%= pendingTabURL %>">
+                Pendentes
+                <span class="sea-tab-badge <%= "pending".equals(activeTab) ? "sea-tab-badge-pending" : "sea-tab-badge-inactive" %>">
+                    <%= pendingTasks.size() %>
+                </span>
+            </a>
+            <a class="sea-tab-link <%= "done".equals(activeTab) ? "sea-tab-active" : "" %>"
+               href="<%= doneTabURL %>">
+                Conclu&#237;das
+                <span class="sea-tab-badge <%= "done".equals(activeTab) ? "sea-tab-badge-done" : "sea-tab-badge-inactive" %>">
+                    <%= completedTasks.size() %>
+                </span>
+            </a>
+        </div>
 
-        <div class="border border-top-0 rounded-bottom p-3 bg-white">
+        <div class="sea-tab-panel">
 
             <% if ("pending".equals(activeTab)) { %>
 
                 <%-- Aba Pendentes --%>
                 <% if (pendingTasks.isEmpty()) { %>
-                    <p class="text-muted mb-0">Nenhuma tarefa pendente neste filtro.</p>
+                    <div class="sea-empty">
+                        <div class="sea-empty-icon">&#10003;</div>
+                        <p class="sea-empty-text">Nenhuma tarefa pendente neste filtro.</p>
+                    </div>
                 <% } else { %>
-                    <table class="table table-hover mb-0">
-                        <thead class="thead-light">
+                    <table class="sea-task-table">
+                        <thead>
                             <tr>
                                 <th>T&#237;tulo</th>
                                 <th>Categoria</th>
@@ -236,32 +702,36 @@ for (Category cat : categories) {
                             </portlet:actionURL>
 
                             <tr>
-                                <td><strong><%= HtmlUtil.escape(task.getTitle()) %></strong></td>
+                                <td><span class="sea-task-title"><%= HtmlUtil.escape(task.getTitle()) %></span></td>
                                 <td>
                                     <% String catName = catNames.get(task.getCategoryId());
                                        if (catName != null) { %>
-                                        <span class="badge badge-info"><%= HtmlUtil.escape(catName) %></span>
+                                        <span class="sea-cat-badge"><%= HtmlUtil.escape(catName) %></span>
                                     <% } else { %>
-                                        <span class="text-muted">&#8212;</span>
+                                        <span class="text-muted" style="font-size:1.1rem;">&#8212;</span>
                                     <% } %>
                                 </td>
                                 <td>
                                     <% if (task.getDueDate() != null) { %>
-                                        <fmt:formatDate value="<%= task.getDueDate() %>" pattern="dd/MM/yyyy" />
+                                        <span class="sea-date">
+                                            <fmt:formatDate value="<%= task.getDueDate() %>" pattern="dd/MM/yyyy" />
+                                        </span>
                                     <% } else { %>
-                                        <span class="text-muted">&#8212;</span>
+                                        <span class="text-muted" style="font-size:1.1rem;">&#8212;</span>
                                     <% } %>
                                 </td>
                                 <td>
-                                    <a href="<%= detailURL %>" class="btn btn-sm btn-outline-info">Detalhes</a>
-                                    <form method="post" action="<%= toggleURL %>" style="display:inline">
-                                        <button type="submit" class="btn btn-sm btn-outline-success">Concluir</button>
-                                    </form>
-                                    <a href="<%= editURL %>" class="btn btn-sm btn-outline-secondary">Editar</a>
-                                    <form method="post" action="<%= deleteURL %>" style="display:inline"
-                                          onsubmit="return confirm('Remover a tarefa \'<%= HtmlUtil.escapeJS(task.getTitle()) %>\'?')">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">Deletar</button>
-                                    </form>
+                                    <div class="sea-actions">
+                                        <a href="<%= detailURL %>" class="sea-action-btn sea-btn-detail">Detalhes</a>
+                                        <form method="post" action="<%= toggleURL %>" style="display:inline;margin:0;">
+                                            <button type="submit" class="sea-action-btn sea-btn-complete">Concluir</button>
+                                        </form>
+                                        <a href="<%= editURL %>" class="sea-action-btn sea-btn-edit">Editar</a>
+                                        <form method="post" action="<%= deleteURL %>" style="display:inline;margin:0;"
+                                              onsubmit="return confirm('Remover a tarefa \'<%= HtmlUtil.escapeJS(task.getTitle()) %>\'?')">
+                                            <button type="submit" class="sea-action-btn sea-btn-delete">Deletar</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
 
@@ -274,10 +744,13 @@ for (Category cat : categories) {
 
                 <%-- Aba Concluídas --%>
                 <% if (completedTasks.isEmpty()) { %>
-                    <p class="text-muted mb-0">Nenhuma tarefa conclu&#237;da neste filtro.</p>
+                    <div class="sea-empty">
+                        <div class="sea-empty-icon">&#128230;</div>
+                        <p class="sea-empty-text">Nenhuma tarefa conclu&#237;da neste filtro.</p>
+                    </div>
                 <% } else { %>
-                    <table class="table table-hover mb-0">
-                        <thead class="thead-light">
+                    <table class="sea-task-table">
+                        <thead>
                             <tr>
                                 <th>T&#237;tulo</th>
                                 <th>Categoria</th>
@@ -301,32 +774,36 @@ for (Category cat : categories) {
                                 <portlet:param name="taskId" value="<%= String.valueOf(task.getTaskId()) %>" />
                             </portlet:actionURL>
 
-                            <tr class="table-success">
-                                <td><strong><%= HtmlUtil.escape(task.getTitle()) %></strong></td>
+                            <tr class="sea-row-done">
+                                <td><span class="sea-task-title-done"><%= HtmlUtil.escape(task.getTitle()) %></span></td>
                                 <td>
                                     <% String catName2 = catNames.get(task.getCategoryId());
                                        if (catName2 != null) { %>
-                                        <span class="badge badge-info"><%= HtmlUtil.escape(catName2) %></span>
+                                        <span class="sea-cat-badge-done"><%= HtmlUtil.escape(catName2) %></span>
                                     <% } else { %>
-                                        <span class="text-muted">&#8212;</span>
+                                        <span class="text-muted" style="font-size:1.1rem;">&#8212;</span>
                                     <% } %>
                                 </td>
                                 <td>
                                     <% if (task.getDueDate() != null) { %>
-                                        <fmt:formatDate value="<%= task.getDueDate() %>" pattern="dd/MM/yyyy" />
+                                        <span class="sea-date">
+                                            <fmt:formatDate value="<%= task.getDueDate() %>" pattern="dd/MM/yyyy" />
+                                        </span>
                                     <% } else { %>
-                                        <span class="text-muted">&#8212;</span>
+                                        <span class="text-muted" style="font-size:1.1rem;">&#8212;</span>
                                     <% } %>
                                 </td>
                                 <td>
-                                    <a href="<%= doneDetailURL %>" class="btn btn-sm btn-outline-info">Detalhes</a>
-                                    <form method="post" action="<%= doneToggleURL %>" style="display:inline">
-                                        <button type="submit" class="btn btn-sm btn-outline-warning">Reabrir</button>
-                                    </form>
-                                    <form method="post" action="<%= doneDeleteURL %>" style="display:inline"
-                                          onsubmit="return confirm('Remover a tarefa \'<%= HtmlUtil.escapeJS(task.getTitle()) %>\'?')">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">Deletar</button>
-                                    </form>
+                                    <div class="sea-actions">
+                                        <a href="<%= doneDetailURL %>" class="sea-action-btn sea-btn-detail">Detalhes</a>
+                                        <form method="post" action="<%= doneToggleURL %>" style="display:inline;margin:0;">
+                                            <button type="submit" class="sea-action-btn sea-btn-reopen">Reabrir</button>
+                                        </form>
+                                        <form method="post" action="<%= doneDeleteURL %>" style="display:inline;margin:0;"
+                                              onsubmit="return confirm('Remover a tarefa \'<%= HtmlUtil.escapeJS(task.getTitle()) %>\'?')">
+                                            <button type="submit" class="sea-action-btn sea-btn-delete">Deletar</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
 
