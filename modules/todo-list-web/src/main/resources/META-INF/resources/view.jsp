@@ -132,7 +132,13 @@ if (!themeDisplay.isSignedIn()) {
             Entrar na conta
         </a>
         <div class="sea-divider">ou</div>
-        <a href="/c/portal/register" class="sea-btn-secondary">
+        <%
+        String signInURL = themeDisplay.getURLSignIn();
+        String createAccountHref = signInURL.replace(
+            "mvcRenderCommandName=%2Flogin%2Flogin",
+            "mvcRenderCommandName=%2Flogin%2Fcreate_account");
+        %>
+        <a href="<%= createAccountHref %>" class="sea-btn-secondary">
             Criar conta gratuita
         </a>
     </div>
