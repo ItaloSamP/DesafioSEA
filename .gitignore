@@ -1,19 +1,31 @@
-# Liferay / Gradle
+# Variáveis de Ambiente e Segredos
+.env
+
+# Pastas do Liferay Workspace (Ambiente Local)
+/bundles/
+/deploy/
+.liferay/
+
+# Gradle e Build (Ignora caches e artefatos compilados)
 .gradle/
 build/
 bin/
-/bundles/
-/deploy/
+out/
 
-#IDEs
+# IDEs (Arquivos de configuração do VS Code, Eclipse, IntelliJ)
+.vscode/
 .idea/
 *.iml
-.vscode/
 .classpath
 .project
 .settings/
 
-
-# OS
+# Sistema Operacional (Arquivos de thumbnail e indexação)
 .DS_Store
 Thumbs.db
+
+
+README.md
+PLANO_DESAFIOSEA.md
+SPRINTS_4_A_7.md
+.claude/
