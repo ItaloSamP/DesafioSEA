@@ -152,8 +152,7 @@ public class CategoryModelImpl
 	public static final long CATEGORYID_COLUMN_BITMASK = 16L;
 
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(
-		DesafioSEA.modules.br.com.seatecnologia.todolist.service.util.
-			ServiceProps.get(
+		br.com.seatecnologia.todolist.service.util.ServiceProps.get(
 				"lock.expiration.time.br.com.seatecnologia.todolist.model.Category"));
 
 	public CategoryModelImpl() {

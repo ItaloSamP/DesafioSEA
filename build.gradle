@@ -5,3 +5,11 @@ allprojects {
         }
     }
 }
+
+tasks.register("dockerDeployAll") {
+    dependsOn(
+        ":modules:todo-list-api:dockerCopyDeploy",
+        ":modules:todo-list-service:dockerCopyDeploy",
+        ":modules:todo-list-web:dockerCopyDeploy"
+    )
+}

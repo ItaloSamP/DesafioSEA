@@ -1,263 +1,225 @@
-# Todo List Portlet — Desafio SEA
+# Todo List Portlet - Desafio SEA
 
-Portlet de gerenciamento de tarefas desenvolvido para o Desafio SEA, construído sobre a plataforma **Liferay DXP 7.4.3** com arquitetura MVC Portlet e persistência gerada pelo Service Builder.
+Portlet de gerenciamento de tarefas desenvolvido para o Desafio SEA, construido sobre **Liferay 7.4.3.112-ga112** com arquitetura MVC Portlet e persistencia gerada pelo Service Builder.
 
 ---
 
-## Índice
+## Indice
 
-- [Visão Geral](#visão-geral)
+- [Visao geral](#visao-geral)
 - [Funcionalidades](#funcionalidades)
 - [Arquitetura](#arquitetura)
-- [Pré-requisitos](#pré-requisitos)
-- [Instalação e Configuração](#instalação-e-configuração)
-- [Compilação e Deploy](#compilação-e-deploy)
-- [Como Usar](#como-usar)
+- [Pre-requisitos](#pre-requisitos)
+- [Instalacao e execucao](#instalacao-e-execucao)
+- [Build e deploy dos modulos](#build-e-deploy-dos-modulos)
+- [Como adicionar o portlet](#como-adicionar-o-portlet)
 - [Testes](#testes)
-- [Bibliotecas e Decisões Técnicas](#bibliotecas-e-decisões-técnicas)
+- [Observacoes importantes](#observacoes-importantes)
 
 ---
 
-## Visão Geral
+## Visao geral
 
-Aplicação de todo list completa rodando como portlet no Liferay. Cada usuário possui seu próprio espaço isolado de tarefas, com suporte a categorias, subtarefas, comentários, filtros por status/categoria e histórico de itens excluídos.
+Aplicacao de todo list rodando como portlet no Liferay. Cada usuario possui seu proprio espaco isolado de tarefas, com suporte a categorias, subtarefas, comentarios, filtros e historico de exclusao logica.
 
-**Stack principal:** Java 17 · Liferay DXP 7.4.3 · Gradle · MySQL 8 · JSP · Bootstrap
+**Stack principal:** Java 17, Liferay 7.4.3.112, Gradle, MySQL 8, JSP, Bootstrap
 
 ---
 
 ## Funcionalidades
 
-### Tarefas
-
-- Criar, editar e excluir tarefas (exclusão lógica — histórico preservado)
-- Marcar como concluída / reabrir
-- Definir data de vencimento
-- Anexar imagem à tarefa
-
-### Organização
-
-- Criar e gerenciar **categorias** por usuário
-- Filtro lateral por categoria com contador de tarefas em cada uma
-- Abas de status: **Pendentes · Atrasadas · Concluídas**
-
-### Subtarefas e Comentários
-
-- Adicionar subtarefas (checklist) vinculadas a uma tarefa
-- Marcar subtarefas como concluídas individualmente
-- Adicionar, editar e remover comentários por tarefa
-
-### Segurança
-
-- Isolamento total por usuário: cada usuário vê e manipula apenas seus próprios dados
-- Verificação de propriedade em todas as operações de escrita
-- Proteção CSRF via `portlet:actionURL`
-- Escape de HTML via `HtmlUtil.escape` (prevenção de XSS)
-- Extração segura de parâmetros com `ParamUtil`
+- Criacao, edicao e exclusao logica de tarefas
+- Marcacao de tarefas como concluidas
+- Categorias por usuario
+- Subtarefas vinculadas a cada tarefa
+- Comentarios por tarefa
+- Isolamento de dados por usuario
+- Validacoes de seguranca nas operacoes de escrita
 
 ---
 
 ## Arquitetura
 
-O projeto segue a estrutura **Liferay Workspace** com três módulos OSGi independentes:
+O projeto segue o formato de **Liferay Workspace** com tres modulos OSGi:
 
 ```text
 DesafioSEA/
-├── modules/
-│   ├── todo-list-api/          # Interfaces, modelos e utilitários (gerado pelo Service Builder)
-│   ├── todo-list-service/      # Implementações de serviço, persistência e testes
-│   └── todo-list-web/          # Portlet MVC, JSPs e ActionCommands
-├── docker-compose.yml          # Liferay + MySQL via Docker
-├── .github/workflows/ci.yml    # Pipeline CI (build + testes no GitHub Actions)
-├── build.gradle                # Configuração raiz do workspace
-└── settings.gradle             # Inclusão dos módulos
+|-- modules/
+|   |-- todo-list-api/      # Interfaces, modelos e utilitarios
+|   |-- todo-list-service/  # Regras de negocio e persistencia
+|   `-- todo-list-web/      # Portlet MVC, JSPs e commands
+|-- docker-compose.yml
+|-- build.gradle
+|-- settings.gradle
+`-- README.md
 ```
 
-### Fluxo de dados
+Fluxo principal:
 
 ```text
-JSP (View)
-  → MVCActionCommand (valida e despacha)
-    → LocalServiceImpl (regras de negócio)
-      → Persistence / Service Builder (SQL gerado)
-        → MySQL
+JSP
+ -> MVCActionCommand
+   -> LocalServiceImpl
+     -> Persistence / Service Builder
+       -> MySQL
 ```
 
-### Entidades (tabelas com prefixo `SEA_`)
+---
 
-| Entidade   | Descrição                                |
-|------------|------------------------------------------|
-| `Task`     | Tarefa principal com soft delete         |
-| `Category` | Categoria pertencente a um usuário       |
-| `Subtask`  | Item de checklist vinculado a uma tarefa |
-| `Comment`  | Comentário vinculado a uma tarefa        |
+## Pre-requisitos
+
+Para rodar o projeto localmente, um novo usuario precisa de:
+
+- Docker Desktop
+- JDK 17 instalado
+- Git
+- Internet na primeira execucao do Gradle Wrapper
+
+O projeto usa o `gradlew` incluido no repositorio, entao nao e necessario instalar Gradle manualmente.
 
 ---
 
-## Pré-requisitos
+## Instalacao e execucao
 
-| Ferramenta     | Versão   | Observação                                  |
-|----------------|----------|---------------------------------------------|
-| JDK            | 17       | Necessário para compilar e rodar o Gradle   |
-| Docker Desktop | 4.x      | Para subir os containers de Liferay e MySQL |
-| Git            | qualquer | Para clonar o repositório                   |
-
-> O Gradle Wrapper (`gradlew`) já está incluso — não é necessário instalar o Gradle separadamente.
-
----
-
-## Instalação e Configuração
-
-### 1. Clonar o repositório
+### 1. Clonar o repositorio
 
 ```bash
-git clone <url-do-repositório>
+git clone <url-do-repositorio>
 cd DesafioSEA
 ```
 
-### 2. Configurar variáveis de ambiente
+### 2. Configurar as variaveis de ambiente
 
-Copie o arquivo de exemplo e ajuste as credenciais do banco se necessário:
+Copie o arquivo de exemplo:
 
 ```bash
 cp .env.example .env
 ```
 
-Os valores padrão já funcionam sem alteração para desenvolvimento local.
+No Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Os valores padrao do arquivo de exemplo ja sao suficientes para desenvolvimento local.
 
 ### 3. Subir os containers
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
-Isso inicia dois serviços:
+Isso sobe:
 
-- **liferay** → `http://localhost:8080` (aguarde ~2 minutos na primeira execução)
-- **mysql** → porta `3306`
+- `todolist-liferay` em `http://localhost:8080`
+- `mysql-todolist` na porta `3306`
 
-### 4. Acompanhar a inicialização (opcional)
+### 4. Esperar o Liferay terminar de subir
+
+Opcionalmente acompanhe os logs:
 
 ```bash
-docker-compose logs -f liferay
+docker compose logs -f liferay
 ```
 
-Aguarde a mensagem `Server startup in X ms` antes de prosseguir.
+Espere a inicializacao terminar antes de fazer o deploy dos modulos.
 
 ---
 
-## Compilação e Deploy
+## Build e deploy dos modulos
 
-Com o Liferay rodando, execute a partir da raiz do projeto:
+**Importante:** apenas subir o Docker **nao** faz o portlet aparecer.
+
+O container do Liferay nao compila os modulos Java automaticamente. Depois que os containers estiverem no ar, e obrigatorio publicar os bundles OSGi do projeto.
+
+### Comando recomendado
+
+Da raiz do projeto, execute:
 
 ```bash
-# Build e deploy completo dos três módulos
-./gradlew deploy
+./gradlew dockerDeployAll
 ```
 
-Os arquivos `.jar` são copiados automaticamente para `deploy/`, pasta mapeada no container. O Liferay realiza o hot-deploy em segundos.
+No Windows PowerShell:
 
-### Comandos adicionais
+```powershell
+.\gradlew.bat dockerDeployAll
+```
+
+Esse comando envia os tres modulos necessarios para o container:
+
+- `todo-list-api`
+- `todo-list-service`
+- `todo-list-web`
+
+Sem isso, o Liferay pode exibir mensagens como:
+
+```text
+This portlet could not be found. Please redeploy it or remove it from the page.
+```
+
+### Outros comandos uteis
 
 ```bash
-# Build sem deploy
+# Build completo
 ./gradlew build
 
-# Build de um módulo específico
-./gradlew :modules:todo-list-service:build
-./gradlew :modules:todo-list-web:build
-
-# Executar testes unitários
+# Testes do modulo service
 ./gradlew :modules:todo-list-service:test
 
-# Hot reload do módulo web (sem rebuild completo)
+# Deploy apenas do modulo web
 ./gradlew :modules:todo-list-web:dockerCopyDeploy
 ```
 
-### Adicionando o portlet ao Liferay
-
-1. Acesse `http://localhost:8080`
-2. **Crie uma conta** pelo botão "Criar conta" na tela inicial
-3. Após o login, crie ou edite uma página
-4. No menu de widgets, busque por **"Todo List"**
-5. Arraste o portlet para a página
-
-> As tabelas do banco (`SEA_Task`, `SEA_Category`, `SEA_Subtask`, `SEA_Comment`) são criadas automaticamente pelo Service Builder no primeiro deploy.
+No fluxo normal, prefira sempre `dockerDeployAll`.
 
 ---
 
-## Como Usar
+## Como adicionar o portlet
 
-### Tela principal
+Depois do deploy:
 
-- O portlet exibe três abas: **Pendentes**, **Atrasadas** e **Concluídas**
-- Tarefas com data de vencimento passada aparecem automaticamente em Atrasadas
-- A barra lateral lista as categorias com o contador de tarefas de cada uma
+1. Acesse `http://localhost:8080`
+2. Crie uma conta ou faca login
+3. Entre em uma pagina editavel
+4. Abra o painel de widgets
+5. Busque por **Todo List**
+6. Arraste o portlet para a pagina
 
-### Gerenciando tarefas
-
-- **Nova tarefa:** botão "Nova Tarefa" no cabeçalho — preencha título, descrição, data de vencimento, categoria e imagem (todos opcionais exceto o título)
-- **Editar:** ícone de edição na linha da tarefa
-- **Concluir / Reabrir:** ícone de check — alterna o status da tarefa
-- **Excluir:** remove logicamente; a tarefa some da lista mas permanece no banco (histórico)
-- **Detalhe:** clique no título da tarefa para abrir a página com subtarefas e comentários
-
-### Categorias
-
-- Acessadas pelo botão "Categorias" no cabeçalho
-- Cada categoria exibe a contagem de tarefas vinculadas
-- Ao criar ou editar uma tarefa, selecione a categoria no formulário
-
-### Subtarefas e comentários
-
-- Disponíveis na página de detalhe de cada tarefa
-- Subtarefas possuem checkbox individual de conclusão
-- Comentários podem ser editados e removidos apenas pelo autor
+Se a pagina tiver uma instancia antiga quebrada, remova o bloco com erro e adicione o portlet novamente apos o deploy.
 
 ---
 
 ## Testes
 
-Os testes unitários estão em `modules/todo-list-service/src/test/` e utilizam **JUnit 4** e **Mockito** (incluindo `mockito-inline` para mockar métodos estáticos do Liferay).
+Os testes unitarios estao no modulo `todo-list-service` e usam **JUnit 4** e **Mockito**.
 
 ```bash
 ./gradlew :modules:todo-list-service:test
 ```
 
-O pipeline de CI no GitHub Actions executa build e testes automaticamente a cada push nas branches `main` e `dev`.
+No Windows PowerShell:
 
-**Cobertura atual:**
-
-- `TaskLocalServiceImplTest` — criação, atualização, soft delete e toggle de status
-- `SubtaskLocalServiceImplTest` — criação, toggle e remoção de subtarefas
+```powershell
+.\gradlew.bat :modules:todo-list-service:test
+```
 
 ---
 
-## Bibliotecas e Decisões Técnicas
+## Observacoes importantes
 
-### Liferay Service Builder
+- O primeiro `gradlew` pode demorar porque baixa o Gradle e dependencias.
+- O portlet depende dos bundles `api`, `service` e `web`; deploy parcial pode fazer o widget sumir do menu do Liferay.
+- Se voce alterar codigo de modulo, rode novamente `dockerDeployAll`.
+- As tabelas do banco sao criadas automaticamente no primeiro deploy dos modulos.
 
-Gera toda a camada de persistência: interfaces, implementações, utilitários e finders customizados. Elimina boilerplate de acesso a banco e garante consistência com os padrões Liferay.
+### Resumo rapido
 
-**Finders customizados (`service.xml`):**
+Para um usuario novo, o fluxo correto e:
 
-- `UserActiveTasks` — tarefas ativas do usuário (`isDeleted = false`)
-- `UserHistoryTasks` — todas as tarefas, incluindo excluídas
-- `UserCategories` — categorias por `userId/groupId`
-- `TaskSubtasks` / `TaskComments` — relacionamentos por chave estrangeira
-
-### Soft Delete
-
-Tarefas não são removidas fisicamente. O campo `isDeleted` marca a exclusão lógica, preservando o histórico sem tabelas separadas de auditoria.
-
-### Docker Compose
-
-Ambiente de desenvolvimento containerizado com Liferay 7.4.3.112-ga112 e MySQL 8.0. A configuração JDBC é injetada via variáveis de ambiente, sem necessidade de editar arquivos internos do portal.
-
-### Mockito Inline
-
-Utilizado para mockar métodos estáticos do Liferay (ex.: `ServiceContext`, `UserLocalServiceUtil`), viabilizando testes unitários sem a necessidade de um container em execução.
-
-### Segurança por design
-
-Toda operação de escrita verifica `task.getUserId() == themeDisplay.getUserId()` antes de prosseguir, garantindo que um usuário nunca modifique dados de outro, independente de manipulação de parâmetros na requisição.
+```powershell
+Copy-Item .env.example .env
+docker compose up -d
+.\gradlew.bat dockerDeployAll
+```

@@ -4,3 +4,9 @@ targetCompatibility = "1.8"
 dependencies {
 	compileOnly group: "com.liferay.portal", name: "release.portal.api", version: "7.4.3.112-ga112"
 }
+
+task dockerCopyDeploy(type: Exec, dependsOn: jar) {
+	commandLine "docker", "cp",
+		jar.archiveFile.get().asFile.absolutePath,
+		"todolist-liferay:/opt/liferay/osgi/modules/${jar.archiveFileName.get()}"
+}
