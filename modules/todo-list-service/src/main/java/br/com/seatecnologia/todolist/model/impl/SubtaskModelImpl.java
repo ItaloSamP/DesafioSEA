@@ -132,8 +132,7 @@ public class SubtaskModelImpl
 	public static final long SUBTASKID_COLUMN_BITMASK = 4L;
 
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(
-		DesafioSEA.modules.br.com.seatecnologia.todolist.service.util.
-			ServiceProps.get(
+		br.com.seatecnologia.todolist.service.util.ServiceProps.get(
 				"lock.expiration.time.br.com.seatecnologia.todolist.model.Subtask"));
 
 	public SubtaskModelImpl() {

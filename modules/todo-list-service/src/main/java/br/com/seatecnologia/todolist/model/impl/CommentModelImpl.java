@@ -153,8 +153,7 @@ public class CommentModelImpl
 	public static final long COMMENTID_COLUMN_BITMASK = 16L;
 
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(
-		DesafioSEA.modules.br.com.seatecnologia.todolist.service.util.
-			ServiceProps.get(
+		br.com.seatecnologia.todolist.service.util.ServiceProps.get(
 				"lock.expiration.time.br.com.seatecnologia.todolist.model.Comment"));
 
 	public CommentModelImpl() {

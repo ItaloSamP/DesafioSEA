@@ -174,8 +174,7 @@ public class TaskModelImpl extends BaseModelImpl<Task> implements TaskModel {
 	public static final long CREATEDATE_COLUMN_BITMASK = 64L;
 
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(
-		DesafioSEA.modules.br.com.seatecnologia.todolist.service.util.
-			ServiceProps.get(
+		br.com.seatecnologia.todolist.service.util.ServiceProps.get(
 				"lock.expiration.time.br.com.seatecnologia.todolist.model.Task"));
 
 	public TaskModelImpl() {
