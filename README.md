@@ -209,7 +209,8 @@ No Windows PowerShell:
 
 ## Observacoes importantes
 
-- O primeiro `gradlew` pode demorar porque baixa o Gradle e dependencias.
+- O primeiro boot do Liferay pode demorar varios minutos.
+- O compose deste projeto desabilita sample data e aumenta a janela do healthcheck para evitar `unhealthy` durante a carga inicial.
 - O portlet depende dos bundles `api`, `service` e `web`; deploy parcial pode fazer o widget sumir do menu do Liferay.
 - Se voce alterar codigo de modulo, rode novamente `dockerDeployAll`.
 - As tabelas do banco sao criadas automaticamente no primeiro deploy dos modulos.

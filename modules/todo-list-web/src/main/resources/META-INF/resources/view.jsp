@@ -5,6 +5,7 @@
 <%@ page import="br.com.seatecnologia.todolist.model.Task" %>
 <%@ page import="com.liferay.document.library.kernel.service.DLAppLocalServiceUtil" %>
 <%@ page import="com.liferay.portal.kernel.repository.model.FileEntry" %>
+<%@ page import="com.liferay.portal.kernel.util.PortalUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
 <%@ page import="java.net.URLEncoder" %>
@@ -128,12 +129,20 @@ if (!themeDisplay.isSignedIn()) {
         <p class="sea-login-subtitle">
             Fa&#231;a login para organizar suas tarefas e aumentar sua produtividade.
         </p>
-        <a href="<%= themeDisplay.getURLSignIn() %>" class="sea-btn-primary">
+        <%
+        String currentPageURL = PortalUtil.escapeRedirect(PortalUtil.getCurrentURL(request));
+        String signInURL = themeDisplay.getURLSignIn();
+
+        if (currentPageURL != null) {
+            signInURL += signInURL.contains("?") ? "&" : "?";
+            signInURL += "redirect=" + URLEncoder.encode(currentPageURL, "UTF-8");
+        }
+        %>
+        <a href="<%= signInURL %>" class="sea-btn-primary">
             Entrar na conta
         </a>
         <div class="sea-divider">ou</div>
         <%
-        String signInURL = themeDisplay.getURLSignIn();
         String createAccountHref = signInURL.replace(
             "mvcRenderCommandName=%2Flogin%2Flogin",
             "mvcRenderCommandName=%2Flogin%2Fcreate_account");

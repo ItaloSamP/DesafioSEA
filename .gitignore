@@ -2,12 +2,15 @@
 .env
 
 # Pastas do Liferay Workspace (Ambiente Local)
-/bundles/
+/bundles/*
+!/bundles/portal-ext.properties
 /deploy/
 .liferay/
 
 # Gradle e Build (Ignora caches e artefatos compilados)
 .gradle/
+.gradle-local/
+.gradle-user/
 build/
 bin/
 out/
