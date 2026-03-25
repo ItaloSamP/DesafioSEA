@@ -7,14 +7,10 @@ services:
       - "8080:8080"
       - "11311:11311"
     environment:
-      - LIFERAY_SETUP_PERIOD_WIZARD_PERIOD_ADD_PERIOD_SAMPLE_PERIOD_DATA=on
+      - LIFERAY_SETUP_PERIOD_WIZARD_PERIOD_ADD_PERIOD_SAMPLE_PERIOD_DATA=off
       - LIFERAY_SETUP_PERIOD_WIZARD_PERIOD_ENABLED=false
-      # Apontando o Liferay para o container do banco de dados
-      - LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_DRIVERCLASSNAME=com.mysql.cj.jdbc.Driver
-      - LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_URL=jdbc:mysql://mysql-db:3306/lportal?characterEncoding=UTF-8&dontTrackOpenResources=true&holdResultsOpenOverStatementClose=true&serverTimezone=GMT&useFastDateParsing=false&useUnicode=true
-      - LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_USERNAME=${DB_USER}
-      - LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_PASSWORD=${DB_PASS}
-      # Ajuste de memória para o Liferay não travar (2GB de RAM)
+      - LIFERAY_PASSWORDS_PERIOD_DEFAULT_PERIOD_POLICY_PERIOD_CHANGE_PERIOD_REQUIRED=false
+      # A configuracao JDBC ja esta centralizada em bundles/portal-ext.properties.
       - LIFERAY_JAVA_OPTS=-Xms2g -Xmx2g -Dfile.encoding=UTF8 -Duser.timezone=GMT-3
     volumes:
       - ./bundles:/opt/liferay/data
@@ -23,6 +19,12 @@ services:
     depends_on:
       mysql-db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS \"http://localhost:8080/c/portal/layout\" || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 15m
     networks:
       - liferay-network
 
@@ -42,10 +44,10 @@ services:
     networks:
       - liferay-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u$$MYSQL_USER -p$$MYSQL_PASSWORD || exit 1"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
       start_period: 30s
 
 networks:
